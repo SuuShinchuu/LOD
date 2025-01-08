@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mana Tracker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+        }
+        .select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+        }
+
+
+        
+        .button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .success-switch:checked {
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="max-w-md mx-auto">
+        <div class="card">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-xl font-bold">Mana Tracker</h1>
+                <button onclick="openSpellDialog()" class="button bg-blue-500 text-white">+ New Spell</button>
+            </div>
+
+            <!-- Mana Counter -->
+            <div class="flex items-center justify-center gap-4 mb-6">
+                <button onclick="adjustMana(-1)" class="button bg-gray-200">-</button>
+                <span id="manaCounter" class="text-4xl font-bold">110</span>
+                <button onclick="adjustMana(1)" class="button bg-gray-200">+</button>
+            </div>
+
+            <!-- Spell Selection -->
+            <div class="mb-4">
+                <label class="block mb-2">Select Spell</label>
+                <select id="spellSelect" class="select">
+                    <option value="">Choose a spell</option>
+                </select>
+            </div>
+
+            <!-- Amplifier -->
+            <div class="mb-4">
+                <label class="block mb-2">Amplifier (0-6)</label>
+                <select id="amplifierSelect" class="select">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+
+            <!-- Success Switch -->
+            <div class="flex items-center mb-4">
+                <input type="checkbox" id="successSwitch" class="success-switch mr-2" checked>
+                <label>Successful Cast</label>
+            </div>
+
+            <!-- Cast Button -->
+            <button onclick="castSpell()" id="castButton" class="button bg-purple-500 text-white w-full">
+                Cast Spell
+            </button>
+        </div>
+    </div>
+
+    <!-- New Spell Dialog -->
+    <div id="spellDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-4 rounded-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Add New Spell</h2>
+            <input type="text" id="newSpellName" placeholder="Spell name" class="select">
+            <input type="number" id="newSpellCost" placeholder="Mana cost" class="select">
+            <div class="flex justify-end gap-2">
+                <button onclick="closeSpellDialog()" class="button bg-gray-200">Cancel</button>
+                <button onclick="addNewSpell()" class="button bg-blue-500 text-white">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mana = 110;
+        let spells = [
+    { id: 1, name: "Cura leve", cost: 10 },
+    { id: 2, name: "Llamarada", cost: 10 },
+    { id: 3, name: "Mano de la muerte", cost: 8 },
+    { id: 4, name: "Difuminar", cost: 10 },
+    { id: 5, name: "Rayo mágico", cost: 14 },
+    { id: 6, name: "Relámpago", cost: 18 },
+    { id: 7, name: "Intercambiar", cost: 25 },
+    { id: 8, name: "Invocar elemental de fuego", cost: 15 },
+    { id: 9, name: "Clonarse", cost: 15 },
+    { id: 10, name: "Parar el tiempo", cost: 30 }
+];
+
+
+
+        // Initialize spell select
+        function updateSpellSelect() {
+            const select = document.getElementById('spellSelect');
+            select.innerHTML = '<option value="">Choose a spell</option>';
+            spells.forEach(spell => {
+                const option = document.createElement('option');
+                option.value = spell.name;
+                option.textContent = `${spell.name} (${spell.cost} mana)`;
+                select.appendChild(option);
+            });
+        }
+
+        // Mana adjustment
+        function adjustMana(amount) {
+            mana = Math.max(0, mana + amount);
+            document.getElementById('manaCounter').textContent = mana;
+        }
+
+        // Cast spell
+        function castSpell() {
+            const spellName = document.getElementById('spellSelect').value;
+            if (!spellName) return;
+
+            const spell = spells.find(s => s.name === spellName);
+            if (!spell) return;
+
+            const amplifier = parseInt(document.getElementById('amplifierSelect').value);
+            const isSuccessful = document.getElementById('successSwitch').checked;
+
+            const totalCost = spell.cost + amplifier;
+            const finalCost = isSuccessful ? totalCost : Math.floor(totalCost / 2);
+
+            adjustMana(-finalCost);
+        }
+
+        // Dialog functions
+        function openSpellDialog() {
+            document.getElementById('spellDialog').classList.remove('hidden');
+        }
+
+        function closeSpellDialog() {
+            document.getElementById('spellDialog').classList.add('hidden');
+            document.getElementById('newSpellName').value = '';
+            document.getElementById('newSpellCost').value = '';
+        }
+
+        function addNewSpell() {
+            const name = document.getElementById('newSpellName').value.trim();
+            const cost = parseInt(document.getElementById('newSpellCost').value);
+
+            if (!name || !cost || cost <= 0) {
+                alert('Please enter a valid name and a cost greater than 0');
+                return;
+            }
+
+            const newSpell = {
+                id: spells.length + 1,
+                name: name,
+                cost: cost
+            };
+
+            spells.push(newSpell);
+            updateSpellSelect();
+            closeSpellDialog();
+        }
+
+        // Initialize
+        updateSpellSelect();
+    </script>
+</body>
+</html>
