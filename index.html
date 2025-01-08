@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League of Dungeoneers Resources</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #e1e1e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23353535' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex-grow: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .subtitle {
+            color: #b8b8b8;
+            font-style: italic;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: #ffd700;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: #b8b8b8;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-top: 1px solid #333;
+            color: #666;
+        }
+
+        .creator {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        .creator:hover {
+            text-decoration: underline;
+        }
+
+        /* For new features, just add more cards in the HTML */
+        .coming-soon {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>League of Dungeoneers Resources</h1>
+            <p class="subtitle">Tools and resources for your adventures</p>
+        </header>
+
+        <div class="features-grid">
+            <!-- Active Features -->
+            <a href="manatracker.html" class="feature-card">
+                <h2 class="feature-title">Mana Tracker</h2>
+                <p class="feature-description">Track your character's mana pool and spell casting with this intuitive tool.</p>
+            </a>
+
+            <!-- Placeholder for future features -->
+            <div class="feature-card coming-soon">
+                <h2 class="feature-title">Inventory Manager</h2>
+                <p class="feature-description">Coming soon...</p>
+            </div>
+
+            <div class="feature-card coming-soon">
+                <h2 class="feature-title">Quest Log</h2>
+                <p class="feature-description">Coming soon...</p>
+            </div>
+
+            <div class="feature-card coming-soon">
+                <h2 class="feature-title">Character Sheet</h2>
+                <p class="feature-description">Coming soon...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Created with ❤️ by <a href="#" class="creator">suuChinShu</a>
+    </footer>
+</body>
+</html>
