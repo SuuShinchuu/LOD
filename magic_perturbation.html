@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Perturbation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #e1e1e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid #333;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .button {
+            background: #ffd700;
+            color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            background: #e5c100;
+        }
+
+        .result {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: #b8b8b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Magic Perturbation</h1>
+        <button class="button" onclick="launchMagicPerturbation()">Launch Magic Perturbation</button>
+        <div id="result" class="result"></div>
+        <button id="summonDemonButton" class="button" style="display: none;" onclick="summonDemon()">Invocar demonio</button>
+        <div id="demonResult" class="result"></div>
+    </div>
+
+    <script>
+        const table = [
+            "Por suerte o habilidad, el mago logra dar forma al hechizo y cambiar el resultado en el último segundo. Se aplica el máximo resultado posible en el dado de daño o curación del hechizo. Cualquier otro hechizo se lanza sin necesidad de gastar maná.",
+            "El mago consume el maná como si el hechizo hubiera tenido éxito.",
+            "El mago pierde el control del hechizo y necesita un tremendo esfuerzo para evitar que se convierta en un caos total. El mago pierde 3 veces el coste de maná del hechizo.",
+            "La mente del mago se atormenta tras ver ciertas imágenes del Vacío. Pierde 1d3 COR.",
+            "El mago pierde el conocimiento y cae al suelo. Debe realizar un test de CON al inicio de su activación para ver si se despierta.",
+            "Confundido, el Mago se da cuenta de que ha olvidado el hechizo a mitad del lanzamiento. El maná se consume como un hechizo fallido, y no puede volver a usar ese hechizo hasta que haya descansado en un asentamiento.",
+            "Un dolor punzante atraviesa la mente del mago. Pierde 1d6 VIT ignorando armadura o armadura natural.",
+            "Unas visiones del Vacío se representan en las mentes de todos los personajes aliados hasta a 3 casillas. No estando acostumbrados a ver esto, todos los personajes pierden 1d8 COR y el mago pierde 1d3 COR.",
+            "El mago, con su torpeza, abre un portal al Vacío y los demonios lo atraviesan. Tira sobre la tabla de Demonios (a continuación) para ver qué se materializa.",
+            "El mago libera una explosión mágica que causa 1D10 DAÑ a cualquier personaje hasta a 3 casillas, ignorando la armadura y la armadura natural."
+        ];
+
+        const demonTable = [
+            { type: "1d3 Diablillos de la plaga", equipment: "-" },
+            { type: "1d3 Demonios de la plaga", equipment: "Roba una carta de arma aleatoria. Armadura 0." },
+            { type: "1d3 Demonios de sangre", equipment: "Roba una carta de arma aleatoria. Armadura 1." },
+            { type: "1 Demonio hinchado", equipment: "2 Hechizos de apoyo, 2 a distancia y 2 a melé." }
+        ];
+
+        function launchMagicPerturbation() {
+            const randomIndex = Math.floor(Math.random() * table.length);
+            const result = table[randomIndex];
+            document.getElementById('result').textContent = result;
+
+            // Show demon summon button if the specific event is triggered
+            if (result.includes("abre un portal al Vacío")) {
+                document.getElementById('summonDemonButton').style.display = 'block';
+            } else {
+                document.getElementById('summonDemonButton').style.display = 'none';
+                document.getElementById('demonResult').textContent = '';
+            }
+        }
+
+        function summonDemon() {
+            const randomIndex = Math.floor(Math.random() * demonTable.length);
+            const demon = demonTable[randomIndex];
+            document.getElementById('demonResult').textContent = `${demon.type}: ${demon.equipment}`;
+        }
+    </script>
+</body>
+</html>

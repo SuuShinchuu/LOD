@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchantment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #e1e1e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid #333;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .button {
+            background: #ffd700;
+            color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .button:hover {
+            background: #e5c100;
+        }
+
+        .result {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: #b8b8b8;
+        }
+
+        .result h2 {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .result p {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enchantment</h1>
+        <button class="button" onclick="getRandomItem('weapon')">Weapon</button>
+        <button class="button" onclick="getRandomItem('armor')">Armor & Shields</button>
+        <button class="button" onclick="getRandomItem('object')">Objects</button>
+        <div id="result" class="result"></div>
+        <button id="curseButton" class="button" style="display: none;" onclick="getCurse()">Get Curse</button>
+        <div id="curseResult" class="result"></div>
+    </div>
+
+    <script>
+        const weaponTable = [
+            { name: "Arma mágica 1", description: "Esta arma tiene un ligero brillo, como si irradiara calor.", effect: "DAÑ del arma es de Fuego" },
+            { name: "Arma mágica 2", description: "Al empuñar esta arma, es como si tu Héroe pudiera sentir su sed de sangre.", effect: "+2 DAÑ" },
+            { name: "Arma mágica 3", description: "Se puede escuchar un ligero zumbido cuando empuñas esta arma, como si estuviera encendida y lista para matar.", effect: "+1 DAÑ" },
+            { name: "Arma mágica 4", description: "Esta arma parece como si fuera una con tu cuerpo, haciendo que cada movimiento sea lo más simple y perfecto posible.", effect: "+10 HC/HD" },
+            { name: "Arma mágica 5", description: "La magia imbuida en esta arma hace que cada golpe o disparo sea casi perfecto.", effect: "+5 HC/HD" },
+            { name: "Arma mágica 6", description: "El bajo peso de esta arma, va más allá de la comprensión de tus Héroes.", effect: "-5 PES y -1 Clase (Min 1)" },
+            { name: "Arma mágica 7", description: "Es como si la magia de esta arma fuera inusualmente fuerte.", effect: "+2 DUR máxima (max 10)." },
+            { name: "Arma mágica 8", description: "Una mirada a esta arma le hace saber a tu Héroe que nada puede interponerse.", effect: "+10 en test de terror/miedo" },
+            { name: "Arma mágica 9", description: "Imbuida de hechizos poderosos, esta arma está diseñada para proteger a su dueño.", effect: "+5 bloqueo y +5 esquiva" },
+            { name: "¡Maldita!", description: "Esta arma puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+        ];
+
+        const armorTable = [
+            { name: "Armadura mágica 1", description: "Esta pieza de armadura irradia fuerza.", effect: "+2 Defensa." },
+            { name: "Armadura mágica 2", description: "Es como si esta pieza de armadura pudiera desviarlo todo.", effect: "+1 Defensa." },
+            { name: "Armadura mágica 3", description: "Esta armadura parece más ligera que el Mithril.", effect: "-50% Peso (RAR)." },
+            { name: "Armadura mágica 4", description: "Encantada por un maestro, se necesitará un gran esfuerzo para romper esta armadura.", effect: "+1 durabilidad máxima." },
+            { name: "Armadura mágica 5", description: "De vez en cuando se ven unas llamas saliendo de la armadura pese a que está fría.", effect: "Ignora el efecto del DAÑ de fuego." },
+            { name: "Armadura mágica 6", description: "Cuando se forjó esta armadura, se imbuyeron encantamientos.", effect: "Resistencia a veneno (+10 CON)." },
+            { name: "Armadura mágica 7", description: "El encantamiento de esta armadura mejora su resistencia.", effect: "+5 Constitución." },
+            { name: "Armadura mágica 8", description: "Es como si la armadura prestara su fuerza.", effect: "+5 Fuerza." },
+            { name: "Armadura mágica 9", description: "Imbuida de hechizos poderosos, la armadura protege.", effect: "+5 esquiva." },
+            { name: "¡Maldita!", description: "Esta armadura puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+        ];
+
+        const objectTable = [
+            { name: "Objeto mágico 1", description: "Este objeto ha sido imbuido con parte de la esencia vital.", effect: "+1 VIT." },
+            { name: "Objeto mágico 2", description: "Se ha imbuido un hechizo de resiliencia.", effect: "+5 Constitución." },
+            { name: "Objeto mágico 3", description: "Este objeto otorga al portador la fuerza.", effect: "+5 Fuerza." },
+            { name: "Objeto mágico 4", description: "Reforzando la mente contra los horrores.", effect: "+5 Determinación." },
+            { name: "Objeto mágico 5", description: "Este objeto hace que el portador sea ágil como un gato.", effect: "+5 Destreza." },
+            { name: "Objeto mágico 6", description: "Este es un artículo extraordinario sin duda.", effect: "+1 Energía." },
+            { name: "Objeto mágico 7", description: "Encantado por un fiel de Rhidnir.", effect: "+1 Suerte." },
+            { name: "Objeto mágico 8", description: "A través de este encantamiento, los magos.", effect: "+5 en una habilidad al azar." },
+            { name: "Objeto mágico 9", description: "Un simple intento de copiar los Anillos de Percepción.", effect: "+1 ficha iniciativa." },
+            { name: "¡Maldito!", description: "Este objeto prestará su fuerza, pero tiene un precio.", effect: "Maldito, consulta la tabla." }
+        ];
+
+        const curseTable = [
+            "-2 VIT",
+            "-5 SAB",
+            "-5 CON",
+            "-5 FUE",
+            "-5 DES",
+            "-3 VIT",
+            "-10 DET",
+            "-5 en una habilidad",
+            "-1 Suerte",
+            "-1 Energía"
+        ];
+
+        function getRandomItem(type) {
+            let table;
+            switch (type) {
+                case 'weapon':
+                    table = weaponTable;
+                    break;
+                case 'armor':
+                    table = armorTable;
+                    break;
+                case 'object':
+                    table = objectTable;
+                    break;
+            }
+
+            const randomIndex = Math.floor(Math.random() * table.length);
+            const item = table[randomIndex];
+            document.getElementById('result').innerHTML = `<h2>${item.name}</h2><p>${item.description}</p><p><strong>${item.effect}</strong></p>`;
+
+            // Show curse button if "Maldita" is selected
+            if (item.name.includes("¡Maldita!")) {
+                document.getElementById('curseButton').style.display = 'block';
+            } else {
+                document.getElementById('curseButton').style.display = 'none';
+                document.getElementById('curseResult').textContent = '';
+            }
+        }
+
+        function getCurse() {
+            const randomIndex = Math.floor(Math.random() * curseTable.length);
+            const curse = curseTable[randomIndex];
+            document.getElementById('curseResult').textContent = curse;
+        }
+    </script>
+</body>
+</html>
