@@ -4,98 +4,162 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mana Tracker</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        .card {
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .select {
+
+        body {
+            background-color: #1a1a1a;
+            color: #e1e1e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid #333;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .button {
+            background: #ffd700;
+            color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            background: #e5c100;
+        }
+
+        .counter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .counter span {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        select {
             width: 100%;
             padding: 0.5rem;
             border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e1e1e1;
             margin-bottom: 1rem;
         }
 
+        .dialog {
+            background: rgba(0, 0, 0, 0.9);
+            color: #e1e1e1;
+            padding: 2rem;
+            border-radius: 10px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
 
-        
-        .button {
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
+        .dialog.active {
+            display: block;
         }
-        .button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+
+        .dialog input {
+            width: calc(100% - 1rem);
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: rgba(0, 0, 0, 0.5);
+            color: #e1e1e1;
         }
-        .success-switch:checked {
-            background-color: #4CAF50;
+
+        .dialog-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4">
-    <div class="max-w-md mx-auto">
-        <div class="card">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-xl font-bold">Mana Tracker</h1>
-                <button onclick="openSpellDialog()" class="button bg-blue-500 text-white">+ New Spell</button>
-            </div>
+<body>
+    <div class="container">
+        <h1>Mana Tracker</h1>
 
-            <!-- Mana Counter -->
-            <div class="flex items-center justify-center gap-4 mb-6">
-                <button onclick="adjustMana(-1)" class="button bg-gray-200">-</button>
-                <span id="manaCounter" class="text-4xl font-bold">110</span>
-                <button onclick="adjustMana(1)" class="button bg-gray-200">+</button>
-            </div>
-
-            <!-- Spell Selection -->
-            <div class="mb-4">
-                <label class="block mb-2">Select Spell</label>
-                <select id="spellSelect" class="select">
-                    <option value="">Choose a spell</option>
-                </select>
-            </div>
-
-            <!-- Amplifier -->
-            <div class="mb-4">
-                <label class="block mb-2">Amplifier (0-6)</label>
-                <select id="amplifierSelect" class="select">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
-            </div>
-
-            <!-- Success Switch -->
-            <div class="flex items-center mb-4">
-                <input type="checkbox" id="successSwitch" class="success-switch mr-2" checked>
-                <label>Successful Cast</label>
-            </div>
-
-            <!-- Cast Button -->
-            <button onclick="castSpell()" id="castButton" class="button bg-purple-500 text-white w-full">
-                Cast Spell
-            </button>
+        <!-- Mana Counter -->
+        <div class="counter">
+            <button onclick="adjustMana(-1)" class="button">-</button>
+            <span id="manaCounter">110</span>
+            <button onclick="adjustMana(1)" class="button">+</button>
         </div>
-    </div>
 
-    <!-- New Spell Dialog -->
-    <div id="spellDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-        <div class="bg-white p-4 rounded-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Add New Spell</h2>
-            <input type="text" id="newSpellName" placeholder="Spell name" class="select">
-            <input type="number" id="newSpellCost" placeholder="Mana cost" class="select">
-            <div class="flex justify-end gap-2">
-                <button onclick="closeSpellDialog()" class="button bg-gray-200">Cancel</button>
-                <button onclick="addNewSpell()" class="button bg-blue-500 text-white">Add</button>
+        <!-- Spell Selection -->
+        <label for="spellSelect">Select Spell</label>
+        <select id="spellSelect">
+            <option value="">Choose a spell</option>
+        </select>
+
+        <!-- Amplifier -->
+        <label for="amplifierSelect">Amplifier (0-6)</label>
+        <select id="amplifierSelect">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+
+        <!-- Success Switch -->
+        <div>
+            <input type="checkbox" id="successSwitch" checked>
+            <label for="successSwitch">Successful Cast</label>
+        </div>
+
+        <!-- Cast Button -->
+        <button onclick="castSpell()" class="button">Cast Spell</button>
+
+        <!-- New Spell Dialog -->
+        <div id="spellDialog" class="dialog">
+            <h2>Add New Spell</h2>
+            <input type="text" id="newSpellName" placeholder="Spell name">
+            <input type="number" id="newSpellCost" placeholder="Mana cost">
+            <div class="dialog-buttons">
+                <button onclick="closeSpellDialog()" class="button">Cancel</button>
+                <button onclick="addNewSpell()" class="button">Add</button>
             </div>
         </div>
     </div>
@@ -103,21 +167,18 @@
     <script>
         let mana = 110;
         let spells = [
-    { id: 1, name: "Cura leve", cost: 10 },
-    { id: 2, name: "Llamarada", cost: 10 },
-    { id: 3, name: "Mano de la muerte", cost: 8 },
-    { id: 4, name: "Difuminar", cost: 10 },
-    { id: 5, name: "Rayo mágico", cost: 14 },
-    { id: 6, name: "Relámpago", cost: 18 },
-    { id: 7, name: "Intercambiar", cost: 25 },
-    { id: 8, name: "Invocar elemental de fuego", cost: 15 },
-    { id: 9, name: "Clonarse", cost: 15 },
-    { id: 10, name: "Parar el tiempo", cost: 30 }
-];
+            { id: 1, name: "Cura leve", cost: 10 },
+            { id: 2, name: "Llamarada", cost: 10 },
+            { id: 3, name: "Mano de la muerte", cost: 8 },
+            { id: 4, name: "Difuminar", cost: 10 },
+            { id: 5, name: "Rayo mágico", cost: 14 },
+            { id: 6, name: "Relámpago", cost: 18 },
+            { id: 7, name: "Intercambiar", cost: 25 },
+            { id: 8, name: "Invocar elemental de fuego", cost: 15 },
+            { id: 9, name: "Clonarse", cost: 15 },
+            { id: 10, name: "Parar el tiempo", cost: 30 }
+        ];
 
-
-
-        // Initialize spell select
         function updateSpellSelect() {
             const select = document.getElementById('spellSelect');
             select.innerHTML = '<option value="">Choose a spell</option>';
@@ -129,13 +190,11 @@
             });
         }
 
-        // Mana adjustment
         function adjustMana(amount) {
             mana = Math.max(0, mana + amount);
             document.getElementById('manaCounter').textContent = mana;
         }
 
-        // Cast spell
         function castSpell() {
             const spellName = document.getElementById('spellSelect').value;
             if (!spellName) return;
@@ -152,13 +211,12 @@
             adjustMana(-finalCost);
         }
 
-        // Dialog functions
         function openSpellDialog() {
-            document.getElementById('spellDialog').classList.remove('hidden');
+            document.getElementById('spellDialog').classList.add('active');
         }
 
         function closeSpellDialog() {
-            document.getElementById('spellDialog').classList.add('hidden');
+            document.getElementById('spellDialog').classList.remove('active');
             document.getElementById('newSpellName').value = '';
             document.getElementById('newSpellCost').value = '';
         }
@@ -183,7 +241,6 @@
             closeSpellDialog();
         }
 
-        // Initialize
         updateSpellSelect();
     </script>
 </body>
