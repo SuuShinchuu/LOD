@@ -169,6 +169,25 @@
         #feedbackForm button:hover {
             background: #e5c100;
         }
+        #feedbackResponse {
+    font-size: 1rem;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+#feedbackResponse.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+#feedbackResponse.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
     </style>
 </head>
 <body>
@@ -207,8 +226,8 @@
         </div>
     </div>
     <section id="feedbackForm">
-        <h2>Your Feedback is super valuable!</h2>
-        <p>Have ideas, requests, or feedback?</p>
+        <h2>Your Feedback is Valuable!</h2>
+        <p>Have ideas, requests, or feedback? Let us know!</p>
         <form id="feedbackForm" action="/api/submit-feedback" method="POST">
             <div class="form-group">
                 <label for="name">Name</label>
@@ -224,12 +243,18 @@
             </div>
             <button type="submit" class="button">Submit Feedback</button>
         </form>
-        
+        <div id="feedbackResponse" style="display: none; margin-top: 1rem;"></div>
     </section>
     <script>
         const form = document.getElementById('feedbackForm');
+        const feedbackResponse = document.getElementById('feedbackResponse');
+    
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
+    
+            // Reset the feedback message
+            feedbackResponse.style.display = 'none';
+            feedbackResponse.textContent = '';
     
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
@@ -242,17 +267,22 @@
                 });
     
                 if (response.ok) {
-                    alert('Thank you for your feedback!');
+                    feedbackResponse.style.display = 'block';
+                    feedbackResponse.style.color = '#28a745'; // Green for success
+                    feedbackResponse.textContent = 'Thank you! Your feedback has been sent.';
                     form.reset();
                 } else {
-                    alert('Failed to submit feedback. Please try again.');
+                    throw new Error('Failed to submit feedback.');
                 }
             } catch (error) {
-                console.error('Error submitting feedback:', error);
-                alert('An error occurred. Please try again.');
+                feedbackResponse.style.display = 'block';
+                feedbackResponse.style.color = '#dc3545'; // Red for error
+                feedbackResponse.textContent = 'An error occurred. Please try again.';
+                console.error('Feedback submission error:', error);
             }
         });
     </script>
+    
     <footer>
         Created with ❤️ by <a href="#" class="creator">suuChinShu</a>
     </footer>
