@@ -244,17 +244,17 @@
             <button type="submit" class="button">Submit Feedback</button>
         </form>
         <div id="feedbackResponse" style="display: none; margin-top: 1rem;"></div>
+        
     </section>
     <script>
         const form = document.getElementById('feedbackForm');
         const feedbackResponse = document.getElementById('feedbackResponse');
     
         form.addEventListener('submit', async (event) => {
-            event.preventDefault();
+            event.preventDefault(); // Prevent the default form submission behavior
     
-            // Reset the feedback message
-            feedbackResponse.style.display = 'none';
-            feedbackResponse.textContent = '';
+            feedbackResponse.style.display = 'none'; // Hide previous messages
+            feedbackResponse.textContent = '';       // Clear previous content
     
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
@@ -272,16 +272,19 @@
                     feedbackResponse.textContent = 'Thank you! Your feedback has been sent.';
                     form.reset();
                 } else {
-                    throw new Error('Failed to submit feedback.');
+                    feedbackResponse.style.display = 'block';
+                    feedbackResponse.style.color = '#dc3545'; // Red for error
+                    feedbackResponse.textContent = 'Failed to submit feedback. Please try again.';
                 }
             } catch (error) {
+                console.error('Error:', error);
                 feedbackResponse.style.display = 'block';
                 feedbackResponse.style.color = '#dc3545'; // Red for error
-                feedbackResponse.textContent = 'An error occurred. Please try again.';
-                console.error('Feedback submission error:', error);
+                feedbackResponse.textContent = 'An unexpected error occurred. Please try again.';
             }
         });
     </script>
+    
     
     <footer>
         Created with ❤️ by <a href="#" class="creator">suuChinShu</a>
