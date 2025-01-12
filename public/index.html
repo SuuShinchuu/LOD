@@ -225,67 +225,11 @@
             </div>
         </div>
     </div>
-    <section id="feedbackForm">
-        <h2>Your Feedback is Valuable!</h2>
-        <p>Have ideas, requests, or feedback? Let us know!</p>
-        <form id="feedbackForm" action="/api/submit-feedback" method="POST">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Your Name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Your Email" required>
-            </div>
-            <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="4" placeholder="Your Message" required></textarea>
-            </div>
-            <button type="submit" class="button">Submit Feedback</button>
-        </form>
-        <div id="feedbackResponse" style="display: none; margin-top: 1rem;"></div>
-        
-    </section>
-    <script>
-        const form = document.getElementById('feedbackForm');
-        const feedbackResponse = document.getElementById('feedbackResponse');
-    
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent the default form submission behavior
-    
-            feedbackResponse.style.display = 'none'; // Hide previous messages
-            feedbackResponse.textContent = '';       // Clear previous content
-    
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-    
-            try {
-                const response = await fetch('/api/submit-feedback', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-    
-                if (response.ok) {
-                    feedbackResponse.style.display = 'block';
-                    feedbackResponse.style.color = '#28a745'; // Green for success
-                    feedbackResponse.textContent = 'Thank you! Your feedback has been sent.';
-                    form.reset();
-                } else {
-                    feedbackResponse.style.display = 'block';
-                    feedbackResponse.style.color = '#dc3545'; // Red for error
-                    feedbackResponse.textContent = 'Failed to submit feedback. Please try again.';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                feedbackResponse.style.display = 'block';
-                feedbackResponse.style.color = '#dc3545'; // Red for error
-                feedbackResponse.textContent = 'An unexpected error occurred. Please try again.';
-            }
-        });
-    </script>
-    
-    
+    <section id="feedbackSection" style="text-align: center; margin-top: 2rem;">
+        <h2>Feedback?</h2>
+        <p>Send an email to <a href="mailto:me@suuchinshu.com" style="color: #ffd700; text-decoration: underline;">me@suuchinshu.com</a></p>
+    </section>  
+      
     <footer>
         Created with ❤️ by <a href="#" class="creator">suuChinShu</a>
     </footer>
