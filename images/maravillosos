@@ -1,0 +1,109 @@
+import os
+import requests
+
+# Lista de nombres de los archivos tal como aparecen en tu HTML
+items = [
+    "Amuleto del minero",
+    "Amuleto del montaraz",
+    "Amuleto mágico",
+    "Anillo mágico",
+    "Arco élfico",
+    "Arma de Mithril (2)",
+    "Arma de Mithril",
+    "Arma mágica (2)",
+    "Arma mágica (3)",
+    "Arma mágica (4)",
+    "Arma mágica",
+    "Armadura acolchada mágica",
+    "Armadura de cuero mágica",
+    "Armadura de cuero tachonado mágica",
+    "Armadura de escama de dragón",
+    "Armadura de escamas mágica",
+    "Armadura de Malla (2)",
+    "Armadura de Malla de Mithril",
+    "Armadura de Malla mágica",
+    "Armadura de Mallas",
+    "Armadura de Mithril (2)",
+    "Armadura de Mithril",
+    "Armadura de placas de Mithril",
+    "Armadura de placas mágica",
+    "Armadura de placas",
+    "Armadura del acechador nocturno",
+    "Arnés de combate",
+    "Arpa",
+    "Capa de Wyvern",
+    "Capa mágica",
+    "Cinturón de batalla extendido",
+    "Escudo de Mithril",
+    "Escudo de Torre",
+    "Escudo mágico",
+    "Flauta",
+    "Flecha de punta plateada",
+    "Ganzuas enanas",
+    "Gran arma de plata",
+    "Grimorio",
+    "Guarda de arco élfica",
+    "Ingredientes",
+    "Kit de desactivación de trampa superior",
+    "Libro de recetas",
+    "Libro",
+    "Mano profética",
+    "Mitillas",
+    "Mochila gigante",
+    "Objeto legendario (2)",
+    "Objeto legendario (3)",
+    "Objeto legendario (4)",
+    "Objeto legendario (5)",
+    "Objeto legendario (6)",
+    "Objeto legendario (7)",
+    "Objeto legendario (8)",
+    "Objeto legendario",
+    "Ojo profético",
+    "Parte",
+    "Pico enano",
+    "Piedra de poder (2)",
+    "Piedra de poder (3)",
+    "Piedra de poder",
+    "Piedras preciosas (2)",
+    "Piedras preciosas",
+    "Piedra profética",
+    "Poción básica (2)",
+    "Poción básica",
+    "Poción épica",
+    "Reliquia religiosa épica",
+    "Ropas elegantes",
+]
+
+# Base URL donde están los archivos
+base_url = "https://sithnecro.github.io/Test5/img/Tesoro_Maravilloso/"
+
+# Crear la carpeta de descargas si no existe
+output_folder = "descargas_maravilloso"
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+
+# Función para convertir los nombres de los archivos en URLs
+def generar_url(nombre):
+    # Reemplazar espacios por %20 y agregar ".png" al final
+    return base_url + nombre.replace(" ", "%20") + ".png"
+
+# Descargar las imágenes
+for item in items:
+    url = generar_url(item)
+    file_name = url.split("/")[-1]
+    file_path = os.path.join(output_folder, file_name)
+
+    print(f"Descargando {url}...")
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            with open(file_path, "wb") as file:
+                file.write(response.content)
+            print(f"Imagen guardada en {file_path}")
+        else:
+            print(f"Error al descargar {url}")
+    except Exception as e:
+        print(f"Error al intentar descargar {url}: {e}")
+
+print("Descarga completada.")
+

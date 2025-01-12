@@ -1,0 +1,89 @@
+import os
+import requests
+
+# Lista de nombres de los archivos tal como aparecen en tu HTML
+items = [
+    "Amuleto de Haamiel",
+    "Anillo de percepción",
+    "Anillo de regeneración",
+    "Anillo del hierofante",
+    "Anillo detector de trampas",
+    "Arco de feywind",
+    "Arco del divino Crepúsculo",
+    "Bolsa de pan inagotable",
+    "Botas de energía",
+    "Botas de estabilidad",
+    "Calcetas de confort perpetuo",
+    "Capa de Elsweyr",
+    "Capa de troll",
+    "Cinturón de azotecobre",
+    "Colgante de desvío",
+    "Colgante de levitación",
+    "Corona de determinación",
+    "Cristal protector",
+    "Cuerno de Alfheim",
+    "Dados bendecidos",
+    "Daga de vrunior",
+    "El broche del vampiro",
+    "El báculo del invocador",
+    "El hacha del cacique",
+    "El kopesh dorado",
+    "El matademonios",
+    "El saco hambriento",
+    "El Yelmo de Golgorosh el cabra",
+    "Elixir legendario",
+    "Escudo de luz cegadora",
+    "Espada del Rayo",
+    "Fajín de la víbora",
+    "Guanteletes de Hraefnir",
+    "Jabalina del Wyvern",
+    "La Ballesta de beregrim",
+    "La blusa del mercader",
+    "La capa de Baltasar",
+    "La cimitarra goblin",
+    "La coraza de Tannulf",
+    "La matagigantes",
+    "La mochila del mediomano",
+    "Martillo de Ohlnirs",
+    "Orbe de control",
+    "Piedra de cordura",
+    "Piedra de valheir",
+    "Piedra de vida",
+    "Pluma encantada",
+    "Roca luminosa",
+    "Saquito de especias mágico",
+]
+
+# Base URL donde están los archivos
+base_url = "https://sithnecro.github.io/Test5/img/Objeto_Legendario/"
+
+# Crear la carpeta de descargas si no existe
+output_folder = "descargas_legendario"
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+
+# Función para convertir los nombres de los archivos en URLs
+def generar_url(nombre):
+    # Reemplazar espacios por %20 y agregar ".png" al final
+    return base_url + nombre.replace(" ", "%20") + ".png"
+
+# Descargar las imágenes
+for item in items:
+    url = generar_url(item)
+    file_name = url.split("/")[-1]
+    file_path = os.path.join(output_folder, file_name)
+
+    print(f"Descargando {url}...")
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            with open(file_path, "wb") as file:
+                file.write(response.content)
+            print(f"Imagen guardada en {file_path}")
+        else:
+            print(f"Error al descargar {url}")
+    except Exception as e:
+        print(f"Error al intentar descargar {url}: {e}")
+
+print("Descarga completada.")
+
