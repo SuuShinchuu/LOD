@@ -209,7 +209,7 @@
     <section id="feedbackForm">
         <h2>Your Feedback is super valuable!</h2>
         <p>Have ideas, requests, or feedback?</p>
-        <form action="mailto:me@suuchinshu.com" method="POST" enctype="text/plain">
+        <form id="feedbackForm" action="/api/submit-feedback" method="POST">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" placeholder="Your Name" required>
@@ -224,6 +224,7 @@
             </div>
             <button type="submit" class="button">Submit Feedback</button>
         </form>
+        
     </section>
     <footer>
         Created with ❤️ by <a href="#" class="creator">suuChinShu</a>
