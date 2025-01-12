@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>League of Dungeoneers Resources</title>
+    <title>Sanity Afflictions</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             background-color: #1a1a1a;
             color: #e1e1e1;
@@ -18,98 +19,28 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-image: 
-                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23353535' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            align-items: center;
+            justify-content: center;
         }
+
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            flex-grow: 1;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            border: 1px solid #333;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-        }
-        .subtitle {
-            color: #b8b8b8;
-            font-style: italic;
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        .feature-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border-color: #ffd700;
-        }
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.4);
-            border-top: 1px solid #333;
-            color: #666;
-        }
-        /* Feedback Form Styles */
-        #feedbackForm {
             text-align: center;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 10px;
             padding: 2rem;
             border: 1px solid #333;
-            margin: 2rem auto;
+            width: 80%;
             max-width: 600px;
         }
-        #feedbackForm h2 {
+
+        h1 {
             font-size: 2rem;
             color: #ffd700;
-            margin-bottom: 1rem;
-        }
-        #feedbackForm p {
-            color: #b8b8b8;
             margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
-        #feedbackForm .form-group {
-            margin-bottom: 1rem;
-        }
-        #feedbackForm label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e1e1e1;
-        }
-        #feedbackForm input, #feedbackForm textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 5px;
-            border: 1px solid #333;
-            background: rgba(0, 0, 0, 0.6);
-            color: #e1e1e1;
-        }
-        #feedbackForm button {
-            margin-top: 1rem;
+
+        .button {
             background: #ffd700;
             color: #1a1a1a;
             padding: 0.75rem 1.5rem;
@@ -118,46 +49,80 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background 0.3s ease;
+            margin-top: 1rem;
         }
-        #feedbackForm button:hover {
+
+        .button:hover {
             background: #e5c100;
+        }
+
+        .result {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: #b8b8b8;
+        }
+
+        .result h2 {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .result p {
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>League of Dungeoneers Resources</h1>
-            <p class="subtitle">Tools and resources for your adventures</p>
-        </header>
-        <div class="features-grid">
-            <a href="manatracker.html" class="feature-card">
-                <h2>Mana Tracker</h2>
-                <p>Track your character's mana pool with ease!</p>
-            </a>
-        </div>
+        <h1>Sanity Afflictions</h1>
+        <button class="button" onclick="takeSanityAffliction()">Take an Affliction</button>
+        <div id="result" class="result"></div>
+        <button id="triggerButton" class="button" style="display: none;" onclick="defineTrigger()">Define Trigger</button>
+        <div id="triggerResult" class="result"></div>
     </div>
-    <section id="feedbackForm">
-        <h2>We Value Your Feedback!</h2>
-        <p>Have ideas, requests, or feedback? Let us know!</p>
-        <form action="mailto:me@suuchinshu.com" method="POST" enctype="text/plain">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="4" required></textarea>
-            </div>
-            <button type="submit">Submit Feedback</button>
-        </form>
-    </section>
-    <footer>
-        Created with ❤️ by <a href="#">suuChinShu</a>
-    </footer>
+
+    <script>
+        const afflictions = [
+            { name: "Odio", description: "El Héroe gana el talento Odio contra el tipo de enemigo con el que luchó por última vez. La criatura debe aparecer en la lista del Bestiario." },
+            { name: "Estrés agudo", description: "Pierde 10 DET hasta el final de la misión. El Héroe gritará descontrolado durante las peleas, alertando a cada ser vivo de la mazmorra. El nivel de amenaza gana +1 adicional por cada batalla desde ahora hasta finalizar la misión, y el efecto termina al concluir la misma." },
+            { name: "Trauma persistente", description: "Esta afección no se revelará hasta tu próxima mazmorra, cuando una situación concreta se asemeje o recuerde al personaje al evento que desencadenó todo. Consulta la tabla a continuación. Una vez que se inicia el trauma todas las tiradas de DET serán con -10 y HC tendrá -10. Una vez activado el trauma, durará hasta que abandones la mazmorra." },
+            { name: "Temor a la oscuridad", description: "El Héroe ha desarrollado un miedo irracional a la oscuridad y todas las tiradas de DET serán con -10." },
+            { name: "Aracnofobia", description: "Al Héroe todas las arañas le parecen aterradoras. Todas las batallas serán causantes de terror." },
+            { name: "Asustadizo", description: "Cada ruido inesperado hace que el Héroe salte y grite, asustando a los compañeros y alertando a los enemigos de su presencia. Una tirada de escenario de 10, hará que algo asuste al Héroe y su grito suba el nivel de amenaza en 2." },
+            { name: "Miedo irracional", description: "El Héroe tiene pavor a un tipo de monstruo concreto. Tira al azar entre Orcos, Goblins, Bestias, Muertos, Reptiles o Elfos Oscuros. Todos los monstruos de esa facción ahora causarán miedo al Héroe." },
+            { name: "Claustrofobia", description: "El Héroe tiene problemas en los espacios reducidos y se vuelve más torpe. Todas las habilidades y estadísticas sufrirán -10 en los pasillos." },
+            { name: "Depresión", description: "El Héroe se desgasta lentamente por los horrores recurrentes y cae en un estado de depresión. Por ello, la reserva de energía del personaje se reduce en 2." }
+        ];
+
+        const triggers = [
+            "El grupo activa una trampa.",
+            "Cae un rastrillo.",
+            "VIT de compañero es reducida a 0.",
+            "Una perturbación en el grupo.",
+            "El grupo se toma un descanso.",
+            "El grupo abre un cofre."
+        ];
+
+        function takeSanityAffliction() {
+            const randomIndex = Math.floor(Math.random() * afflictions.length);
+            const affliction = afflictions[randomIndex];
+            document.getElementById('result').innerHTML = `<h2>${affliction.name}</h2><p>${affliction.description}</p>`;
+
+            // Show trigger button if Trauma Persistente is selected
+            if (affliction.name === "Trauma persistente") {
+                document.getElementById('triggerButton').style.display = 'block';
+            } else {
+                document.getElementById('triggerButton').style.display = 'none';
+                document.getElementById('triggerResult').textContent = '';
+            }
+        }
+
+        function defineTrigger() {
+            const randomIndex = Math.floor(Math.random() * triggers.length);
+            const trigger = triggers[randomIndex];
+            document.getElementById('triggerResult').textContent = trigger;
+        }
+    </script>
 </body>
 </html>
