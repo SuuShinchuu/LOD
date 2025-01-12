@@ -124,24 +124,50 @@
             text-decoration: underline;
         }
 
-        /* For new features, just add more cards in the HTML */
-        .coming-soon {
-            opacity: 0.5;
-            cursor: not-allowed;
+        #feedbackForm {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid #333;
+            margin: 2rem auto;
+            max-width: 600px;
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 1rem;
-            }
+        #feedbackForm h2 {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
 
-            h1 {
-                font-size: 2rem;
-            }
+        #feedbackForm p {
+            color: #b8b8b8;
+            margin-bottom: 1.5rem;
+        }
 
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
+        #feedbackForm input, #feedbackForm textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e1e1e1;
+            margin-bottom: 1rem;
+        }
+
+        #feedbackForm button {
+            margin-top: 1rem;
+            background: #ffd700;
+            color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        #feedbackForm button:hover {
+            background: #e5c100;
         }
     </style>
 </head>
@@ -153,13 +179,11 @@
         </header>
 
         <div class="features-grid">
-            <!-- Active Features -->
             <a href="manatracker.html" class="feature-card">
                 <h2 class="feature-title">Mana Tracker</h2>
                 <p class="feature-description">Track your character's mana pool and spell casting with this intuitive tool.</p>
             </a>
 
-            <!-- Events Feature -->
             <div class="feature-card">
                 <h2 class="feature-title">Events</h2>
                 <p class="feature-description">Explore random events for your adventures.</p>
@@ -171,7 +195,6 @@
                 </ul>
             </div>
 
-            <!-- Active Features -->
             <a href="initiative.html" class="feature-card">
                 <h2 class="feature-title">Initiative</h2>
                 <p class="feature-description">Who is going next?</p>
@@ -183,9 +206,29 @@
             </div>
         </div>
     </div>
-
+    <section id="feedbackForm">
+        <h2>Your Feedback is super valuable!</h2>
+        <p>Have ideas, requests, or feedback?</p>
+        <form action="mailto:me@suuchinshu.com" method="POST" enctype="text/plain">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="Your Message" required></textarea>
+            </div>
+            <button type="submit" class="button">Submit Feedback</button>
+        </form>
+    </section>
     <footer>
         Created with ❤️ by <a href="#" class="creator">suuChinShu</a>
     </footer>
+
+   
 </body>
 </html>
