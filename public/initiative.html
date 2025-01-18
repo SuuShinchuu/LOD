@@ -31,6 +31,9 @@
             border: 1px solid #333;
             width: 80%;
             max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
@@ -74,6 +77,17 @@
             font-weight: bold;
             color: #ffd700;
         }
+
+        #currentToken {
+            font-size: 1.8rem;
+            padding: 1rem;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +108,9 @@
 
         <div id="tokenCount" class="result"></div>
 
-        <button class="button" id="nextTurnButton" onclick="nextTurn()" style="display: none;">Next Turn</button>
+        <button class="button" id="nextTokenButton" onclick="nextToken()" style="display: none;">Next Token</button>
+        <button class="button" id="" onclick="nextTurn()" style="display: none;">Next Turn</button>
+
 
         <div id="currentToken" class="result"></div>
     </div>
@@ -115,11 +131,11 @@
             updateTokenCount();
 
             if (tokenPool.length > 0) {
-                document.getElementById('nextTurnButton').style.display = 'block';
+                document.getElementById('nextTokenButton').style.display = 'block';
             }
         }
 
-        function nextTurn() {
+        function nextToken() {
             if (tokenPool.length === 0) {
                 document.getElementById('currentToken').textContent = 'No tokens left!';
                 return;
@@ -134,11 +150,12 @@
                 blackCount--;
             }
 
-            document.getElementById('currentToken').textContent = `Current Token: ${selectedToken}`;
+            document.getElementById('currentToken').textContent = 'Current Token: ';
+            document.getElementById('currentToken').innerHTML = `Current Token: <span>${selectedToken}</span>`;
             updateTokenCount();
 
             if (tokenPool.length === 0) {
-                document.getElementById('nextTurnButton').style.display = 'none';
+                document.getElementById('nextTokenButton').style.display = 'none';
             }
         }
 
