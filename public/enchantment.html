@@ -86,9 +86,9 @@
         <!-- English Content -->
         <div id="content-en" style="display: none;">
             <h1>Enchantment Generator</h1>
-            <button class="button" onclick="getRandomItem('weapon')">Weapon</button>
-            <button class="button" onclick="getRandomItem('armor')">Armor & Shields</button>
-            <button class="button" onclick="getRandomItem('object')">Objects</button>
+            <button class="button" data-type="weapon">Weapon</button>
+            <button class="button" data-type="armor">Armor & Shields</button>
+            <button class="button" data-type="object">Objects</button>
             <div id="result" class="result"></div>
             <button id="curseButton" class="button" style="display: none;" onclick="getCurse()">Get Curse</button>
             <div id="curseResult" class="result"></div>
@@ -97,9 +97,9 @@
         <!-- Spanish Content -->
         <div id="content-es" style="display: none;">
             <h1>Generador de Encantamientos</h1>
-            <button class="button" onclick="getRandomItem('weapon')">Arma</button>
-            <button class="button" onclick="getRandomItem('armor')">Armadura y Escudos</button>
-            <button class="button" onclick="getRandomItem('object')">Objetos</button>
+            <button class="button" data-type="weapon">Arma</button>
+            <button class="button" data-type="armor">Armadura y Escudos</button>
+            <button class="button" data-type="object">Objetos</button>
             <div id="result" class="result"></div>
             <button id="curseButton" class="button" style="display: none;">Obtener Maldición</button>
             <div id="curseResult" class="result"></div>
@@ -240,28 +240,37 @@
         ];
 
         async function getRandomItem(type) {
-            let language = await detectLanguage(); // Change const to let
+            let language = await detectLanguage();
+            console.log('Current language:', language);
+            console.log('Button type clicked:', type);
             let table;
 
             switch (type) {
                 case 'weapon':
                     table = weaponTable;
+                    console.log('Selected weapon table');
                     break;
                 case 'armor':
                     table = armorTable;
+                    console.log('Selected armor table');
                     break;
                 case 'object':
                     table = objectTable;
+                    console.log('Selected object table');
                     break;
             }
 
             // Ensure language is either 'en' or 'es'
             if (language !== 'en' && language !== 'es') {
+                console.log('Invalid language detected, defaulting to es');
                 language = 'es';
             }
             
             const randomIndex = Math.floor(Math.random() * table.length);
+            console.log('Random index:', randomIndex);
+            console.log('Selected item:', table[randomIndex]);
             const item = table[randomIndex][language];
+            console.log('Translated item:', item);
 
             document.getElementById('result').innerHTML = `
                 <h2>${item.name}</h2>
@@ -298,6 +307,7 @@
 
         async function initializePage() {
             const language = await detectLanguage();
+            console.log('Initializing page with language:', language);
             document.getElementById(`content-${language}`).style.display = 'block';
         }
 
@@ -315,9 +325,31 @@
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            await toggleLanguage();
-            await updateLanguageButton();
+            console.log('DOM Content Loaded');
+            
+            // Add click listeners to all buttons with data-type
+            document.querySelectorAll('.button[data-type]').forEach(button => {
+                console.log('Adding listener to button:', button.textContent, 'with type:', button.dataset.type);
+                button.addEventListener('click', () => {
+                    console.log('Button clicked:', button.textContent);
+                    getRandomItem(button.dataset.type);
+                });
+            });
+
+            // Add click listeners to curse buttons
+            document.getElementById('curseButton').addEventListener('click', getCurse);
+            
+            // Initialize the page
+            await initializePage();
+            console.log('Page initialized');
         });
+
+        // Also let's check the language detection function
+        async function detectLanguage() {
+            const storedLang = localStorage.getItem("preferredLanguage");
+            console.log('Stored language:', storedLang);
+            return storedLang || 'en';
+        }
     </script>
 </body>
 </html>
