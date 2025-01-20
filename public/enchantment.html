@@ -260,34 +260,36 @@
                     break;
             }
 
-            // Ensure language is either 'en' or 'es'
-            if (language !== 'en' && language !== 'es') {
-                console.log('Invalid language detected, defaulting to es');
-                language = 'es';
-            }
-            
             const randomIndex = Math.floor(Math.random() * table.length);
             console.log('Random index:', randomIndex);
-            console.log('Selected item:', table[randomIndex]);
             const item = table[randomIndex][language];
             console.log('Translated item:', item);
 
-            document.getElementById('result').innerHTML = `
+            // Get the result element within the current language container
+            const currentContainer = document.getElementById(`content-${language}`);
+            const resultElement = currentContainer.querySelector('.result');
+            console.log('Result element found:', resultElement);
+
+            resultElement.innerHTML = `
                 <h2>${item.name}</h2>
                 <p>${item.description}</p>
                 <p><strong>${item.effect}</strong></p>
             `;
 
-            const curseButton = document.getElementById('curseButton');
+            // Get the curse button within the current language container
+            const curseButton = currentContainer.querySelector('#curseButton');
+            const curseResult = currentContainer.querySelector('#curseResult');
+            
             if (item.name.includes("Maldita") || item.name.includes("Cursed")) {
-                curseButton.style.display = 'block';
+                if (curseButton) curseButton.style.display = 'block';
             } else {
-                curseButton.style.display = 'none';
-                document.getElementById('curseResult').textContent = '';
+                if (curseButton) curseButton.style.display = 'none';
+                if (curseResult) curseResult.textContent = '';
             }
         }
 
-        function getCurse() {
+        async function getCurse() {
+            const language = await detectLanguage();
             const curseTable = [
                 "-2 VIT",
                 "-5 SAB",
@@ -302,13 +304,26 @@
             ];
             const randomIndex = Math.floor(Math.random() * curseTable.length);
             const curse = curseTable[randomIndex];
-            document.getElementById('curseResult').textContent = curse;
+            
+            const currentContainer = document.getElementById(`content-${language}`);
+            const curseResult = currentContainer.querySelector('#curseResult');
+            if (curseResult) curseResult.textContent = curse;
         }
 
         async function initializePage() {
             const language = await detectLanguage();
             console.log('Initializing page with language:', language);
-            document.getElementById(`content-${language}`).style.display = 'block';
+            
+            // Hide all language containers first
+            document.querySelectorAll('[id^="content-"]').forEach(container => {
+                container.style.display = 'none';
+            });
+            
+            // Show the correct language container
+            const container = document.getElementById(`content-${language}`);
+            if (container) {
+                container.style.display = 'block';
+            }
         }
 
         async function switchLanguage() {
@@ -337,7 +352,9 @@
             });
 
             // Add click listeners to curse buttons
-            document.getElementById('curseButton').addEventListener('click', getCurse);
+            document.querySelectorAll('[id^="curseButton"]').forEach(button => {
+                button.addEventListener('click', getCurse);
+            });
             
             // Initialize the page
             await initializePage();
