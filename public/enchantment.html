@@ -1,31 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta name="description" content="Find tools, resources, and trackers for League of Dungeoneers, including mana trackers, enchantments, and sanity afflictions.">
-<meta name="keywords" content="League of Dungeoneers, LoD, resources, tools, trackers, enchantments, sanity, magic, mana tracker">
-<meta name="author" content="suuChinShu">
-<link rel="canonical" href="https://lod-flax.vercel.app/enchantment.html">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "url": "https://lod-flax.vercel.app/enchantment.html",
-  "name": "League of Dungeoneers Enchantment Generator",
-  "description": "Generate random enchantments for weapons, armor, and objects.",
-  "publisher": {
-    "@type": "Person",
-    "name": "suuChinShu"
-  }
-}
-</script>
-<script src="language.js" defer></script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enchantment</title>
+    <title>Enchantment Generator</title>
+    <meta name="description" content="Generate random enchantments for weapons, armor, and objects.">
+    <meta name="keywords" content="League of Dungeoneers, LoD, resources, enchantments, magic">
+    <meta name="author" content="suuChinShu">
+    <link rel="canonical" href="https://lod-flax.vercel.app/enchantment.html">
+
+    <!-- Language Detection Script -->
+    <script src="language.js" defer></script>
+
     <style>
         * {
             margin: 0;
@@ -97,70 +83,166 @@
 </head>
 <body>
     <div class="container">
-        <h1>Enchantment</h1>
-        <button class="button" onclick="getRandomItem('weapon')">Weapon</button>
-        <button class="button" onclick="getRandomItem('armor')">Armor & Shields</button>
-        <button class="button" onclick="getRandomItem('object')">Objects</button>
-        <div id="result" class="result"></div>
-        <button id="curseButton" class="button" style="display: none;" onclick="getCurse()">Get Curse</button>
-        <div id="curseResult" class="result"></div>
+        <!-- English Content -->
+        <div id="content-en" style="display: none;">
+            <h1>Enchantment Generator</h1>
+            <button class="button" onclick="getRandomItem('weapon')">Weapon</button>
+            <button class="button" onclick="getRandomItem('armor')">Armor & Shields</button>
+            <button class="button" onclick="getRandomItem('object')">Objects</button>
+            <div id="result" class="result"></div>
+            <button id="curseButton" class="button" style="display: none;" onclick="getCurse()">Get Curse</button>
+            <div id="curseResult" class="result"></div>
+        </div>
+
+        <!-- Spanish Content -->
+        <div id="content-es" style="display: none;">
+            <h1>Generador de Encantamientos</h1>
+            <button class="button" onclick="getRandomItem('weapon')">Arma</button>
+            <button class="button" onclick="getRandomItem('armor')">Armadura y Escudos</button>
+            <button class="button" onclick="getRandomItem('object')">Objetos</button>
+            <div id="result" class="result"></div>
+            <button id="curseButton" class="button" style="display: none;" onclick="getCurse()">Obtener Maldición</button>
+            <div id="curseResult" class="result"></div>
+        </div>
     </div>
+
+    <button onclick="switchLanguage()" id="languageToggle">
+        <span id="langText">Switch to Spanish</span>
+    </button>
 
     <script>
         const weaponTable = [
-            { name: "Arma mágica 1", description: "Esta arma tiene un ligero brillo, como si irradiara calor.", effect: "DAÑ del arma es de Fuego" },
-            { name: "Arma mágica 2", description: "Al empuñar esta arma, es como si tu Héroe pudiera sentir su sed de sangre.", effect: "+2 DAÑ" },
-            { name: "Arma mágica 3", description: "Se puede escuchar un ligero zumbido cuando empuñas esta arma, como si estuviera encendida y lista para matar.", effect: "+1 DAÑ" },
-            { name: "Arma mágica 4", description: "Esta arma parece como si fuera una con tu cuerpo, haciendo que cada movimiento sea lo más simple y perfecto posible.", effect: "+10 HC/HD" },
-            { name: "Arma mágica 5", description: "La magia imbuida en esta arma hace que cada golpe o disparo sea casi perfecto.", effect: "+5 HC/HD" },
-            { name: "Arma mágica 6", description: "El bajo peso de esta arma, va más allá de la comprensión de tus Héroes.", effect: "-5 PES y -1 Clase (Min 1)" },
-            { name: "Arma mágica 7", description: "Es como si la magia de esta arma fuera inusualmente fuerte.", effect: "+2 DUR máxima (max 10)." },
-            { name: "Arma mágica 8", description: "Una mirada a esta arma le hace saber a tu Héroe que nada puede interponerse.", effect: "+10 en test de terror/miedo" },
-            { name: "Arma mágica 9", description: "Imbuida de hechizos poderosos, esta arma está diseñada para proteger a su dueño.", effect: "+5 bloqueo y +5 esquiva" },
-            { name: "¡Maldita!", description: "Esta arma puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+            {
+                en: { name: "Magic Weapon 1", description: "This weapon has a slight glow to it, as if radiating heat.", effect: "Weapon does fire damage." },
+                es: { name: "Arma mágica 1", description: "Esta arma tiene un ligero brillo, como si irradiara calor.", effect: "DAÑ del arma es de Fuego" }
+            },
+            {
+                en: { name: "Magic Weapon 2", description: "When wielding this weapon, it is as if your hero can feel its thirst for blood.", effect: "+2 Damage" },
+                es: { name: "Arma mágica 2", description: "Al empuñar esta arma, es como si tu héroe pudiera sentir su sed de sangre.", effect: "+2 DAÑ" }
+            },
+            {
+                en: { name: "Magic Weapon 3", description: "A slight humming sound can be heard when you wield this weapon, as if it is powered up and ready to kill.", effect: "+1 Damage" },
+                es: { name: "Arma mágica 3", description: "Se puede escuchar un ligero zumbido cuando empuñas esta arma, como si estuviera encendida y lista para matar.", effect: "+1 DAÑ" }
+            },
+            {
+                en: { name: "Magic Weapon 4", description: "This weapon feels as if it is one with your body, making every move as simple and perfect as they can be.", effect: "+10 CS/RS" },
+                es: { name: "Arma mágica 4", description: "Esta arma parece como si fuera una con tu cuerpo, haciendo que cada movimiento sea lo más simple y perfecto posible.", effect: "+10 HC/HD" }
+            },
+            {
+                en: { name: "Magic Weapon 5", description: "The magic infused into this weapon causes every strike or shot to be all but perfect.", effect: "+5 CS/RS" },
+                es: { name: "Arma mágica 5", description: "La magia imbuida en esta arma hace que cada golpe o disparo sea casi perfecto.", effect: "+5 HC/HD" }
+            },
+            {
+                en: { name: "Magic Weapon 6", description: "The low weight of this weapon goes beyond your hero's understanding.", effect: "-5 Encumbrance (Min 1)" },
+                es: { name: "Arma mágica 6", description: "El bajo peso de esta arma, va más allá de la comprensión de tus héroes.", effect: "-5 PES y -1 Clase (Min 1)" }
+            },
+            {
+                en: { name: "Magic Weapon 7", description: "It is as if the magic in this weapon is unusually strong.", effect: "+2 Max Durability (Max 10)" },
+                es: { name: "Arma mágica 7", description: "Es como si la magia de esta arma fuera inusualmente fuerte.", effect: "+2 DUR máxima (max 10)." }
+            },
+            {
+                en: { name: "Magic Weapon 8", description: "One look at this weapon reassures your hero that nothing can stand between them and victory.", effect: "+10 on Fear and Terror tests" },
+                es: { name: "Arma mágica 8", description: "Una mirada a esta arma le hace saber a tu héroe que nada puede interponerse.", effect: "+10 en test de terror/miedo" }
+            },
+            {
+                en: { name: "Magic Weapon 9", description: "Imbued with powerful spells, this weapon is designed to protect its owner.", effect: "+5 Parry and +5 Dodge" },
+                es: { name: "Arma mágica 9", description: "Imbuida de hechizos poderosos, esta arma está diseñada para proteger a su dueño.", effect: "+5 bloqueo y +5 esquiva" }
+            },
+            {
+                en: { name: "Cursed Weapon", description: "This weapon may lend its strength, but it comes at a price.", effect: "Cursed. See the curse table for details." },
+                es: { name: "¡Maldita!", description: "Esta arma puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+            }
         ];
-
         const armorTable = [
-            { name: "Armadura mágica 1", description: "Esta pieza de armadura irradia fuerza.", effect: "+2 Defensa." },
-            { name: "Armadura mágica 2", description: "Es como si esta pieza de armadura pudiera desviarlo todo.", effect: "+1 Defensa." },
-            { name: "Armadura mágica 3", description: "Esta armadura parece más ligera que el Mithril.", effect: "-50% Peso (RAR)." },
-            { name: "Armadura mágica 4", description: "Encantada por un maestro, se necesitará un gran esfuerzo para romper esta armadura.", effect: "+1 durabilidad máxima." },
-            { name: "Armadura mágica 5", description: "De vez en cuando se ven unas llamas saliendo de la armadura pese a que está fría.", effect: "Ignora el efecto del DAÑ de fuego." },
-            { name: "Armadura mágica 6", description: "Cuando se forjó esta armadura, se imbuyeron encantamientos.", effect: "Resistencia a veneno (+10 CON)." },
-            { name: "Armadura mágica 7", description: "El encantamiento de esta armadura mejora su resistencia.", effect: "+5 Constitución." },
-            { name: "Armadura mágica 8", description: "Es como si la armadura prestara su fuerza.", effect: "+5 Fuerza." },
-            { name: "Armadura mágica 9", description: "Imbuida de hechizos poderosos, la armadura protege.", effect: "+5 esquiva." },
-            { name: "¡Maldita!", description: "Esta armadura puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+            {
+                en: { name: "Magic Armor 1", description: "This piece of armor radiates strength.", effect: "+2 Defense" },
+                es: { name: "Armadura mágica 1", description: "Esta pieza de armadura irradia fuerza.", effect: "+2 Defensa." }
+            },
+            {
+                en: { name: "Magic Armor 2", description: "It's as if this piece of armor could deflect everything.", effect: "+1 Defense" },
+                es: { name: "Armadura mágica 2", description: "Es como si esta pieza de armadura pudiera desviarlo todo.", effect: "+1 Defensa." }
+            },
+            {
+                en: { name: "Magic Armor 3", description: "This armor seems lighter than Mithril.", effect: "-50% Weight (RAR)" },
+                es: { name: "Armadura mágica 3", description: "Esta armadura parece más ligera que el Mithril.", effect: "-50% Peso (RAR)." }
+            },
+            {
+                en: { name: "Magic Armor 4", description: "Enchanted by a master, it will take great effort to break this armor.", effect: "+1 max durability" },
+                es: { name: "Armadura mágica 4", description: "Encantada por un maestro, se necesitará un gran esfuerzo para romper esta armadura.", effect: "+1 durabilidad máxima." }
+            },
+            {
+                en: { name: "Magic Armor 5", description: "Occasionally flames can be seen coming from the armor despite being cold.", effect: "Ignores fire damage effect" },
+                es: { name: "Armadura mágica 5", description: "De vez en cuando se ven unas llamas saliendo de la armadura pese a que está fría.", effect: "Ignora el efecto del DAÑ de fuego." }
+            },
+            {
+                en: { name: "Magic Armor 6", description: "When this armor was forged, enchantments were imbued.", effect: "Poison resistance (+10 CON)" },
+                es: { name: "Armadura mágica 6", description: "Cuando se forjó esta armadura, se imbuyeron encantamientos.", effect: "Resistencia a veneno (+10 CON)." }
+            },
+            {
+                en: { name: "Magic Armor 7", description: "The enchantment of this armor improves its resistance.", effect: "+5 Constitution" },
+                es: { name: "Armadura mágica 7", description: "El encantamiento de esta armadura mejora su resistencia.", effect: "+5 Constitución." }
+            },
+            {
+                en: { name: "Magic Armor 8", description: "It's as if the armor lends its strength.", effect: "+5 Strength" },
+                es: { name: "Armadura mágica 8", description: "Es como si la armadura prestara su fuerza.", effect: "+5 Fuerza." }
+            },
+            {
+                en: { name: "Magic Armor 9", description: "Imbued with powerful spells, the armor protects.", effect: "+5 dodge" },
+                es: { name: "Armadura mágica 9", description: "Imbuida de hechizos poderosos, la armadura protege.", effect: "+5 esquiva." }
+            },
+            {
+                en: { name: "Cursed!", description: "This armor may lend its strength, but it comes at a price.", effect: "Cursed, check the curse table" },
+                es: { name: "¡Maldita!", description: "Esta armadura puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+            }
         ];
 
         const objectTable = [
-            { name: "Objeto mágico 1", description: "Este objeto ha sido imbuido con parte de la esencia vital.", effect: "+1 VIT." },
-            { name: "Objeto mágico 2", description: "Se ha imbuido un hechizo de resiliencia.", effect: "+5 Constitución." },
-            { name: "Objeto mágico 3", description: "Este objeto otorga al portador la fuerza.", effect: "+5 Fuerza." },
-            { name: "Objeto mágico 4", description: "Reforzando la mente contra los horrores.", effect: "+5 Determinación." },
-            { name: "Objeto mágico 5", description: "Este objeto hace que el portador sea ágil como un gato.", effect: "+5 Destreza." },
-            { name: "Objeto mágico 6", description: "Este es un artículo extraordinario sin duda.", effect: "+1 Energía." },
-            { name: "Objeto mágico 7", description: "Encantado por un fiel de Rhidnir.", effect: "+1 Suerte." },
-            { name: "Objeto mágico 8", description: "A través de este encantamiento, los magos.", effect: "+5 en una habilidad al azar." },
-            { name: "Objeto mágico 9", description: "Un simple intento de copiar los Anillos de Percepción.", effect: "+1 ficha iniciativa." },
-            { name: "¡Maldito!", description: "Este objeto prestará su fuerza, pero tiene un precio.", effect: "Maldito, consulta la tabla." }
+            {
+                en: { name: "Magic Object 1", description: "This object has been imbued with part of the vital essence.", effect: "+1 VIT" },
+                es: { name: "Objeto mágico 1", description: "Este objeto ha sido imbuido con parte de la esencia vital.", effect: "+1 VIT." }
+            },
+            {
+                en: { name: "Magic Object 2", description: "A spell of resilience has been imbued.", effect: "+5 Constitution" },
+                es: { name: "Objeto mágico 2", description: "Se ha imbuido un hechizo de resiliencia.", effect: "+5 Constitución." }
+            },
+            {
+                en: { name: "Magic Object 3", description: "This object grants the bearer strength.", effect: "+5 Strength" },
+                es: { name: "Objeto mágico 3", description: "Este objeto otorga al portador la fuerza.", effect: "+5 Fuerza." }
+            },
+            {
+                en: { name: "Magic Object 4", description: "Reinforcing the mind against horrors.", effect: "+5 Determination" },
+                es: { name: "Objeto mágico 4", description: "Reforzando la mente contra los horrores.", effect: "+5 Determinación." }
+            },
+            {
+                en: { name: "Magic Object 5", description: "This object makes the bearer as agile as a cat.", effect: "+5 Dexterity" },
+                es: { name: "Objeto mágico 5", description: "Este objeto hace que el portador sea ágil como un gato.", effect: "+5 Destreza." }
+            },
+            {
+                en: { name: "Magic Object 6", description: "This is an extraordinary item indeed.", effect: "+1 Energy" },
+                es: { name: "Objeto mágico 6", description: "Este es un artículo extraordinario sin duda.", effect: "+1 Energía." }
+            },
+            {
+                en: { name: "Magic Object 7", description: "Enchanted by a faithful of Rhidnir.", effect: "+1 Luck" },
+                es: { name: "Objeto mágico 7", description: "Encantado por un fiel de Rhidnir.", effect: "+1 Suerte." }
+            },
+            {
+                en: { name: "Magic Object 8", description: "Through this enchantment, the mages.", effect: "+5 in a random skill" },
+                es: { name: "Objeto mágico 8", description: "A través de este encantamiento, los magos.", effect: "+5 en una habilidad al azar." }
+            },
+            {
+                en: { name: "Magic Object 9", description: "A simple attempt to copy the Rings of Perception.", effect: "+1 initiative token" },
+                es: { name: "Objeto mágico 9", description: "Un simple intento de copiar los Anillos de Percepción.", effect: "+1 ficha iniciativa." }
+            },
+            {
+                en: { name: "Cursed!", description: "This object will lend its strength, but it comes at a price.", effect: "Cursed, check the table" },
+                es: { name: "¡Maldito!", description: "Este objeto prestará su fuerza, pero tiene un precio.", effect: "Maldito, consulta la tabla." }
+            }
         ];
 
-        const curseTable = [
-            "-2 VIT",
-            "-5 SAB",
-            "-5 CON",
-            "-5 FUE",
-            "-5 DES",
-            "-3 VIT",
-            "-10 DET",
-            "-5 en una habilidad",
-            "-1 Suerte",
-            "-1 Energía"
-        ];
-
-        function getRandomItem(type) {  
+        async function getRandomItem(type) {
+            const language = await detectLanguage(); // "en" o "es"
             let table;
+
             switch (type) {
                 case 'weapon':
                     table = weaponTable;
@@ -174,11 +256,15 @@
             }
 
             const randomIndex = Math.floor(Math.random() * table.length);
-            const item = table[randomIndex];
-            document.getElementById('result').innerHTML = `<h2>${item.name}</h2><p>${item.description}</p><p><strong>${item.effect}</strong></p>`;
+            const item = table[randomIndex][language]; // Selecciona según idioma
 
-            // Show curse button if "Maldita" is selected
-            if (item.name.includes("¡Maldit")) {
+            document.getElementById('result').innerHTML = `
+                <h2>${item.name}</h2>
+                <p>${item.description}</p>
+                <p><strong>${item.effect}</strong></p>
+            `;
+
+            if (item.name.includes("Maldita") || item.name.includes("Cursed")) {
                 document.getElementById('curseButton').style.display = 'block';
             } else {
                 document.getElementById('curseButton').style.display = 'none';
@@ -187,10 +273,45 @@
         }
 
         function getCurse() {
+            const curseTable = [
+                "-2 VIT",
+                "-5 SAB",
+                "-5 CON",
+                "-5 FUE",
+                "-5 DES",
+                "-2 HP",
+                "-5 WIS",
+                "-5 STR",
+                "-5 DEX",
+                "-5 CON"
+            ];
             const randomIndex = Math.floor(Math.random() * curseTable.length);
             const curse = curseTable[randomIndex];
             document.getElementById('curseResult').textContent = curse;
         }
+
+        async function initializePage() {
+            const language = await detectLanguage();
+            document.getElementById(`content-${language}`).style.display = 'block';
+        }
+
+        async function switchLanguage() {
+            const currentLanguage = localStorage.getItem("preferredLanguage");
+            const newLanguage = currentLanguage === "en" ? "es" : "en";
+            localStorage.setItem("preferredLanguage", newLanguage);
+            await toggleLanguage();
+        }
+
+        async function updateLanguageButton() {
+            const currentLang = await detectLanguage();
+            const langText = document.getElementById('langText');
+            langText.textContent = currentLang === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés';
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await toggleLanguage();
+            await updateLanguageButton();
+        });
     </script>
 </body>
 </html>
