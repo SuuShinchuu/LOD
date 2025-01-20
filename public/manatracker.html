@@ -187,26 +187,83 @@
 
     <script>
         let mana = 110;
-        let spells = [
-            { id: 1, name: "Cura leve", cost: 10 },
-            { id: 2, name: "Llamarada", cost: 10 },
-            { id: 3, name: "Mano de la muerte", cost: 8 },
-            { id: 4, name: "Difuminar", cost: 10 },
-            { id: 5, name: "Rayo mágico", cost: 14 },
-            { id: 6, name: "Relámpago", cost: 18 },
-            { id: 7, name: "Intercambiar", cost: 25 },
-            { id: 8, name: "Invocar elemental de fuego", cost: 15 },
-            { id: 9, name: "Clonarse", cost: 15 },
-            { id: 10, name: "Parar el tiempo", cost: 30 }
-        ];
+        const spellData = [
+    { id: 1, en: { name: "Light Healing", cost: 10 }, es: { name: "Cura leve", cost: 10 } },
+    { id: 2, en: { name: "Protective Shield", cost: 10 }, es: { name: "Escudo protector", cost: 10 } },
+    { id: 3, en: { name: "Flare", cost: 10 }, es: { name: "Llamarada", cost: 10 } },
+    { id: 4, en: { name: "Hand of Death", cost: 8 }, es: { name: "Mano de la muerte", cost: 8 } },
+    { id: 5, en: { name: "Healing Hands", cost: 12 }, es: { name: "Manos sanadoras", cost: 12 } },
+    { id: 6, en: { name: "Feign Death", cost: 8 }, es: { name: "Muerte fingida", cost: 8 } },
+    { id: 7, en: { name: "Gust of Wind", cost: 8 }, es: { name: "Ráfaga de viento", cost: 8 } },
+    { id: 8, en: { name: "Slip", cost: 10 }, es: { name: "Resbalón", cost: 10 } },
+    { id: 9, en: { name: "Unlock", cost: 8 }, es: { name: "Abrir cerraduras", cost: 8 } },
+    { id: 10, en: { name: "Close Door", cost: 12 }, es: { name: "Cerrar puerta", cost: 12 } },
+    { id: 11, en: { name: "Blur", cost: 10 }, es: { name: "Difuminar", cost: 10 } },
+    { id: 12, en: { name: "Strengthen Body", cost: 8 }, es: { name: "Fortalecer cuerpo", cost: 8 } },
+    { id: 13, en: { name: "Magic Scribbles", cost: "-" }, es: { name: "Garabatos mágicos", cost: "-" } },
+    { id: 14, en: { name: "Summon Plague Imp", cost: 10 }, es: { name: "Invocar Diablillo de la plaga", cost: 10 } },
+    { id: 15, en: { name: "Iron Fists", cost: 14 }, es: { name: "Puños de hierro", cost: 14 } },
+    { id: 16, en: { name: "Silence", cost: 12 }, es: { name: "Silencio", cost: 12 } },
+    { id: 17, en: { name: "Magic Armor", cost: 15 }, es: { name: "Armadura mágica", cost: 15 } },
+    { id: 18, en: { name: "Confuse", cost: 18 }, es: { name: "Confundir", cost: 18 } },
+    { id: 19, en: { name: "Control the Dead", cost: 12 }, es: { name: "Controlar a los muertos", cost: 12 } },
+    { id: 20, en: { name: "Corruption", cost: 16 }, es: { name: "Corrupción", cost: 16 } },
+    { id: 21, en: { name: "Healing", cost: 12 }, es: { name: "Curación", cost: 12 } },
+    { id: 22, en: { name: "Enchant Object", cost: "-" }, es: { name: "Encantar Objeto", cost: "-" } },
+    { id: 23, en: { name: "Summon Water Elemental", cost: 15 }, es: { name: "Invocar Elemental de Agua", cost: 15 } },
+    { id: 24, en: { name: "Summon Wind Elemental", cost: 18 }, es: { name: "Invocar Elemental de Viento", cost: 18 } },
+    { id: 25, en: { name: "Slow", cost: 12 }, es: { name: "Lentitud", cost: 12 } },
+    { id: 26, en: { name: "Icy Spikes", cost: 12 }, es: { name: "Puntas heladas", cost: 12 } },
+    { id: 27, en: { name: "Magic Ray", cost: 14 }, es: { name: "Rayo mágico", cost: 14 } },
+    { id: 28, en: { name: "Lightning", cost: 18 }, es: { name: "Relámpago", cost: 18 } },
+    { id: 29, en: { name: "Vampiric Touch", cost: 14 }, es: { name: "Toque Vampírico", cost: 14 } },
+    { id: 30, en: { name: "Weakness", cost: 18 }, es: { name: "Debilidad", cost: 18 } },
+    { id: 31, en: { name: "Banish the Dead", cost: 20 }, es: { name: "Desterrar muertos", cost: 20 } },
+    { id: 32, en: { name: "Frost Beam", cost: 15 }, es: { name: "Haz de escarcha", cost: 15 } },
+    { id: 33, en: { name: "Exchange", cost: 25 }, es: { name: "Intercambiar", cost: 25 } },
+    { id: 34, en: { name: "Summon Souls", cost: 15 }, es: { name: "Invocar almas", cost: 15 } },
+    { id: 35, en: { name: "Summon Demon", cost: 15 }, es: { name: "Invocar demonio", cost: 15 } },
+    { id: 36, en: { name: "Summon Fire Elemental", cost: 15 }, es: { name: "Invocar elemental de fuego", cost: 15 } },
+    { id: 37, en: { name: "Summon Earth Elemental", cost: 15 }, es: { name: "Invocar elemental de tierra", cost: 15 } },
+    { id: 38, en: { name: "Spy Gaze", cost: 25 }, es: { name: "Mirada espía", cost: 25 } },
+    { id: 39, en: { name: "Mental Boost", cost: 15 }, es: { name: "Refuerzo mental", cost: 15 } },
+    { id: 40, en: { name: "Hold", cost: 20 }, es: { name: "Retención", cost: 20 } },
+    { id: 41, en: { name: "Icy Tomb", cost: 25 }, es: { name: "Tumba helada", cost: 25 } },
+    { id: 42, en: { name: "Antipathy", cost: 18 }, es: { name: "Antipatía", cost: 18 } },
+    { id: 43, en: { name: "Clone Self", cost: 15 }, es: { name: "Clonarse", cost: 15 } },
+    { id: 44, en: { name: "Levitate", cost: 20 }, es: { name: "Levitar", cost: 20 } },
+    { id: 45, en: { name: "Rain of Fire", cost: 25 }, es: { name: "Lluvia de fuego", cost: 25 } },
+    { id: 46, en: { name: "Wall of Fire", cost: 20 }, es: { name: "Muro de fuego", cost: 20 } },
+    { id: 47, en: { name: "Stop Time", cost: 30 }, es: { name: "Parar el tiempo", cost: 30 } },
+    { id: 48, en: { name: "Speed", cost: 15 }, es: { name: "Velocidad", cost: 15 } },
+    { id: 49, en: { name: "Fireball", cost: 30 }, es: { name: "Bola de fuego", cost: 30 } },
+    { id: 50, en: { name: "Into the Void", cost: 40 }, es: { name: "En el Vacío", cost: 40 } },
+    { id: 51, en: { name: "Vital Force", cost: 30 }, es: { name: "Fuerza vital", cost: 30 } },
+    { id: 52, en: { name: "Summon Greater Demon", cost: 25 }, es: { name: "Invocar Gran Demonio", cost: 25 } },
+    { id: 53, en: { name: "Raise the Dead", cost: 15 }, es: { name: "Levantar a los muertos", cost: 15 } },
+    { id: 54, en: { name: "Teleport", cost: 20 }, es: { name: "Teletransporte", cost: 20 } }
+];
 
-        function updateSpellSelect() {
+
+        async function getSpells() {
+            const language = await detectLanguage();
+            return spellData.map(spell => ({
+                id: spell.id,
+                name: spell[language].name,
+                cost: spell[language].cost
+            }));
+        }
+
+        async function updateSpellSelect() {
             const select = document.getElementById('spellSelect');
             select.innerHTML = '<option value="">Choose a spell</option>';
+            
+            const spells = await getSpells();
             spells.forEach(spell => {
                 const option = document.createElement('option');
                 option.value = spell.name;
-                option.textContent = `${spell.name} (${spell.cost} mana)`;
+                const costDisplay = spell.cost === "-" ? "-" : `${spell.cost} mana`;
+                option.textContent = `${spell.name} (${costDisplay})`;
                 select.appendChild(option);
             });
         }
@@ -216,17 +273,18 @@
             document.getElementById('manaCounter').textContent = mana;
         }
 
-        function castSpell() {
+        async function castSpell() {
+            const spells = await getSpells();
             const spellName = document.getElementById('spellSelect').value;
             if (!spellName) return;
 
             const spell = spells.find(s => s.name === spellName);
-            if (!spell) return;
+            if (!spell || spell.cost === "-") return;
 
             const amplifier = parseInt(document.getElementById('amplifierSelect').value);
             const isSuccessful = document.getElementById('successSwitch').checked;
 
-            const totalCost = spell.cost + amplifier;
+            const totalCost = parseInt(spell.cost) + amplifier;
             const finalCost = isSuccessful ? totalCost : Math.floor(totalCost / 2);
 
             adjustMana(-finalCost);
@@ -262,7 +320,9 @@
             closeSpellDialog();
         }
 
-        updateSpellSelect();
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSpellSelect();
+        });
     </script>
 </body>
 </html>
