@@ -225,6 +225,13 @@
             const curse = curseTable[randomIndex];
             document.getElementById('curseResult').textContent = curse;
         }
+
+        async function initializePage() {
+            const language = await detectLanguage();
+            document.getElementById(`content-${language}`).style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
 </html>
