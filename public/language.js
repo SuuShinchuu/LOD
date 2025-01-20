@@ -1,5 +1,3 @@
-
-
 async function detectLanguage() {
     if (localStorage.getItem("preferredLanguage")) {
         return localStorage.getItem("preferredLanguage");
@@ -19,6 +17,7 @@ async function detectLanguage() {
         return "en"; // Default to English if detection fails
     }
 }
+
 async function toggleLanguage() {
     const language = await detectLanguage();
 
@@ -32,6 +31,13 @@ async function toggleLanguage() {
         englishContent.style.display = "block";
         if (spanishContent) spanishContent.style.display = "none";
     }
+}
+
+async function switchLanguage() {
+    const currentLanguage = localStorage.getItem("preferredLanguage");
+    const newLanguage = currentLanguage === "en" ? "es" : "en";
+    localStorage.setItem("preferredLanguage", newLanguage);
+    await toggleLanguage();
 }
 
 document.addEventListener("DOMContentLoaded", toggleLanguage);
