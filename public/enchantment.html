@@ -240,7 +240,7 @@
         ];
 
         async function getRandomItem(type) {
-            const language = await detectLanguage(); // "en" o "es"
+            let language = await detectLanguage(); // Change const to let
             let table;
 
             switch (type) {
@@ -254,12 +254,14 @@
                     table = objectTable;
                     break;
             }
-            if (language != "en") {
-                language = "es";
+
+            // Ensure language is either 'en' or 'es'
+            if (language !== 'en' && language !== 'es') {
+                language = 'es';
             }
             
             const randomIndex = Math.floor(Math.random() * table.length);
-            const item = table[randomIndex][language]; // Selecciona según idioma
+            const item = table[randomIndex][language];
 
             document.getElementById('result').innerHTML = `
                 <h2>${item.name}</h2>
@@ -267,10 +269,11 @@
                 <p><strong>${item.effect}</strong></p>
             `;
 
+            const curseButton = document.getElementById('curseButton');
             if (item.name.includes("Maldita") || item.name.includes("Cursed")) {
-                document.getElementById('curseButton').style.display = 'block';
+                curseButton.style.display = 'block';
             } else {
-                document.getElementById('curseButton').style.display = 'none';
+                curseButton.style.display = 'none';
                 document.getElementById('curseResult').textContent = '';
             }
         }
