@@ -150,29 +150,89 @@
             }
         ];
         const armorTable = [
-            { name: "Armadura mágica 1", description: "Esta pieza de armadura irradia fuerza.", effect: "+2 Defensa." },
-            { name: "Armadura mágica 2", description: "Es como si esta pieza de armadura pudiera desviarlo todo.", effect: "+1 Defensa." },
-            { name: "Armadura mágica 3", description: "Esta armadura parece más ligera que el Mithril.", effect: "-50% Peso (RAR)." },
-            { name: "Armadura mágica 4", description: "Encantada por un maestro, se necesitará un gran esfuerzo para romper esta armadura.", effect: "+1 durabilidad máxima." },
-            { name: "Armadura mágica 5", description: "De vez en cuando se ven unas llamas saliendo de la armadura pese a que está fría.", effect: "Ignora el efecto del DAÑ de fuego." },
-            { name: "Armadura mágica 6", description: "Cuando se forjó esta armadura, se imbuyeron encantamientos.", effect: "Resistencia a veneno (+10 CON)." },
-            { name: "Armadura mágica 7", description: "El encantamiento de esta armadura mejora su resistencia.", effect: "+5 Constitución." },
-            { name: "Armadura mágica 8", description: "Es como si la armadura prestara su fuerza.", effect: "+5 Fuerza." },
-            { name: "Armadura mágica 9", description: "Imbuida de hechizos poderosos, la armadura protege.", effect: "+5 esquiva." },
-            { name: "¡Maldita!", description: "Esta armadura puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+            {
+                en: { name: "Magic Armor 1", description: "This piece of armor radiates strength.", effect: "+2 Defense" },
+                es: { name: "Armadura mágica 1", description: "Esta pieza de armadura irradia fuerza.", effect: "+2 Defensa." }
+            },
+            {
+                en: { name: "Magic Armor 2", description: "It's as if this piece of armor could deflect everything.", effect: "+1 Defense" },
+                es: { name: "Armadura mágica 2", description: "Es como si esta pieza de armadura pudiera desviarlo todo.", effect: "+1 Defensa." }
+            },
+            {
+                en: { name: "Magic Armor 3", description: "This armor seems lighter than Mithril.", effect: "-50% Weight (RAR)" },
+                es: { name: "Armadura mágica 3", description: "Esta armadura parece más ligera que el Mithril.", effect: "-50% Peso (RAR)." }
+            },
+            {
+                en: { name: "Magic Armor 4", description: "Enchanted by a master, it will take great effort to break this armor.", effect: "+1 max durability" },
+                es: { name: "Armadura mágica 4", description: "Encantada por un maestro, se necesitará un gran esfuerzo para romper esta armadura.", effect: "+1 durabilidad máxima." }
+            },
+            {
+                en: { name: "Magic Armor 5", description: "Occasionally flames can be seen coming from the armor despite being cold.", effect: "Ignores fire damage effect" },
+                es: { name: "Armadura mágica 5", description: "De vez en cuando se ven unas llamas saliendo de la armadura pese a que está fría.", effect: "Ignora el efecto del DAÑ de fuego." }
+            },
+            {
+                en: { name: "Magic Armor 6", description: "When this armor was forged, enchantments were imbued.", effect: "Poison resistance (+10 CON)" },
+                es: { name: "Armadura mágica 6", description: "Cuando se forjó esta armadura, se imbuyeron encantamientos.", effect: "Resistencia a veneno (+10 CON)." }
+            },
+            {
+                en: { name: "Magic Armor 7", description: "The enchantment of this armor improves its resistance.", effect: "+5 Constitution" },
+                es: { name: "Armadura mágica 7", description: "El encantamiento de esta armadura mejora su resistencia.", effect: "+5 Constitución." }
+            },
+            {
+                en: { name: "Magic Armor 8", description: "It's as if the armor lends its strength.", effect: "+5 Strength" },
+                es: { name: "Armadura mágica 8", description: "Es como si la armadura prestara su fuerza.", effect: "+5 Fuerza." }
+            },
+            {
+                en: { name: "Magic Armor 9", description: "Imbued with powerful spells, the armor protects.", effect: "+5 dodge" },
+                es: { name: "Armadura mágica 9", description: "Imbuida de hechizos poderosos, la armadura protege.", effect: "+5 esquiva." }
+            },
+            {
+                en: { name: "Cursed!", description: "This armor may lend its strength, but it comes at a price.", effect: "Cursed, check the curse table" },
+                es: { name: "¡Maldita!", description: "Esta armadura puede prestar su fuerza, pero tiene un precio.", effect: "Maldita, consulta la tabla de maldiciones" }
+            }
         ];
 
         const objectTable = [
-            { name: "Objeto mágico 1", description: "Este objeto ha sido imbuido con parte de la esencia vital.", effect: "+1 VIT." },
-            { name: "Objeto mágico 2", description: "Se ha imbuido un hechizo de resiliencia.", effect: "+5 Constitución." },
-            { name: "Objeto mágico 3", description: "Este objeto otorga al portador la fuerza.", effect: "+5 Fuerza." },
-            { name: "Objeto mágico 4", description: "Reforzando la mente contra los horrores.", effect: "+5 Determinación." },
-            { name: "Objeto mágico 5", description: "Este objeto hace que el portador sea ágil como un gato.", effect: "+5 Destreza." },
-            { name: "Objeto mágico 6", description: "Este es un artículo extraordinario sin duda.", effect: "+1 Energía." },
-            { name: "Objeto mágico 7", description: "Encantado por un fiel de Rhidnir.", effect: "+1 Suerte." },
-            { name: "Objeto mágico 8", description: "A través de este encantamiento, los magos.", effect: "+5 en una habilidad al azar." },
-            { name: "Objeto mágico 9", description: "Un simple intento de copiar los Anillos de Percepción.", effect: "+1 ficha iniciativa." },
-            { name: "¡Maldito!", description: "Este objeto prestará su fuerza, pero tiene un precio.", effect: "Maldito, consulta la tabla." }
+            {
+                en: { name: "Magic Object 1", description: "This object has been imbued with part of the vital essence.", effect: "+1 VIT" },
+                es: { name: "Objeto mágico 1", description: "Este objeto ha sido imbuido con parte de la esencia vital.", effect: "+1 VIT." }
+            },
+            {
+                en: { name: "Magic Object 2", description: "A spell of resilience has been imbued.", effect: "+5 Constitution" },
+                es: { name: "Objeto mágico 2", description: "Se ha imbuido un hechizo de resiliencia.", effect: "+5 Constitución." }
+            },
+            {
+                en: { name: "Magic Object 3", description: "This object grants the bearer strength.", effect: "+5 Strength" },
+                es: { name: "Objeto mágico 3", description: "Este objeto otorga al portador la fuerza.", effect: "+5 Fuerza." }
+            },
+            {
+                en: { name: "Magic Object 4", description: "Reinforcing the mind against horrors.", effect: "+5 Determination" },
+                es: { name: "Objeto mágico 4", description: "Reforzando la mente contra los horrores.", effect: "+5 Determinación." }
+            },
+            {
+                en: { name: "Magic Object 5", description: "This object makes the bearer as agile as a cat.", effect: "+5 Dexterity" },
+                es: { name: "Objeto mágico 5", description: "Este objeto hace que el portador sea ágil como un gato.", effect: "+5 Destreza." }
+            },
+            {
+                en: { name: "Magic Object 6", description: "This is an extraordinary item indeed.", effect: "+1 Energy" },
+                es: { name: "Objeto mágico 6", description: "Este es un artículo extraordinario sin duda.", effect: "+1 Energía." }
+            },
+            {
+                en: { name: "Magic Object 7", description: "Enchanted by a faithful of Rhidnir.", effect: "+1 Luck" },
+                es: { name: "Objeto mágico 7", description: "Encantado por un fiel de Rhidnir.", effect: "+1 Suerte." }
+            },
+            {
+                en: { name: "Magic Object 8", description: "Through this enchantment, the mages.", effect: "+5 in a random skill" },
+                es: { name: "Objeto mágico 8", description: "A través de este encantamiento, los magos.", effect: "+5 en una habilidad al azar." }
+            },
+            {
+                en: { name: "Magic Object 9", description: "A simple attempt to copy the Rings of Perception.", effect: "+1 initiative token" },
+                es: { name: "Objeto mágico 9", description: "Un simple intento de copiar los Anillos de Percepción.", effect: "+1 ficha iniciativa." }
+            },
+            {
+                en: { name: "Cursed!", description: "This object will lend its strength, but it comes at a price.", effect: "Cursed, check the table" },
+                es: { name: "¡Maldito!", description: "Este objeto prestará su fuerza, pero tiene un precio.", effect: "Maldito, consulta la tabla." }
+            }
         ];
 
         async function getRandomItem(type) {
@@ -184,10 +244,10 @@
                     table = weaponTable;
                     break;
                 case 'armor':
-                    table = armorTable; // Similar estructura
+                    table = armorTable;
                     break;
                 case 'object':
-                    table = objectTable; // Similar estructura
+                    table = objectTable;
                     break;
             }
 
