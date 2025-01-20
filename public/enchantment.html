@@ -101,7 +101,7 @@
             <button class="button" onclick="getRandomItem('armor')">Armadura y Escudos</button>
             <button class="button" onclick="getRandomItem('object')">Objetos</button>
             <div id="result" class="result"></div>
-            <button id="curseButton" class="button" style="display: none;" onclick="getCurse()">Obtener Maldición</button>
+            <button id="curseButton" class="button" style="display: none;">Obtener Maldición</button>
             <div id="curseResult" class="result"></div>
         </div>
     </div>
@@ -254,7 +254,10 @@
                     table = objectTable;
                     break;
             }
-
+            if (language != "en") {
+                language = "es";
+            }
+            
             const randomIndex = Math.floor(Math.random() * table.length);
             const item = table[randomIndex][language]; // Selecciona según idioma
 
