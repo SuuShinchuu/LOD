@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="description" content="Find tools, resources, and trackers for League of Dungeoneers, including mana trackers, enchantments, and sanity afflictions.">
+    <meta name="keywords" content="League of Dungeoneers, LoD, resources, tools, trackers, enchantments, sanity, magic, mana tracker">
+    <meta name="author" content="suuChinShu">
+    <link rel="canonical" href="https://lod-flax.vercel.app/magic_perturbation.html">
 
-<meta name="description" content="Find tools, resources, and trackers for League of Dungeoneers, including mana trackers, enchantments, and sanity afflictions.">
-<meta name="keywords" content="League of Dungeoneers, LoD, resources, tools, trackers, enchantments, sanity, magic, mana tracker">
-<meta name="author" content="suuChinShu">
-<link rel="canonical" href="https://lod-flax.vercel.app/magic_perturbation.html">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "url": "https://lod-flax.vercel.app/magic_perturbation.html",
-  "name": "Magic Perturbation",
-  "description": "Explore magical perturbation effects in League of Dungeoneers.",
-  "publisher": {
-    "@type": "Person",
-    "name": "suuChinShu"
-  }
-}
-</script>
-<script src="language.js" defer></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "url": "https://lod-flax.vercel.app/magic_perturbation.html",
+        "name": "Magic Perturbation",
+        "description": "Explore magical perturbation effects in League of Dungeoneers.",
+        "publisher": {
+            "@type": "Person",
+            "name": "suuChinShu"
+        }
+    }
+    </script>
+    <script src="language.js" defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Perturbation</title>
@@ -86,41 +84,75 @@
 </head>
 <body>
     <div class="container">
-        <h1>Magic Perturbation</h1>
-        <button class="button" onclick="launchMagicPerturbation()">Launch Magic Perturbation</button>
-        <div id="result" class="result"></div>
-        <button id="summonDemonButton" class="button" style="display: none;" onclick="summonDemon()">Invocar demonio</button>
-        <div id="demonResult" class="result"></div>
+        <!-- English Content -->
+        <div id="content-en" style="display: none;">
+            <h1>Magic Perturbation</h1>
+            <button class="button" onclick="launchMagicPerturbation()">Launch Magic Perturbation</button>
+            <div id="result" class="result"></div>
+            <button id="summonDemonButton" class="button" style="display: none;" onclick="summonDemon()">Summon Demon</button>
+            <div id="demonResult" class="result"></div>
+        </div>
+
+        <!-- Spanish Content -->
+        <div id="content-es" style="display: none;">
+            <h1>Perturbación Mágica</h1>
+            <button class="button" onclick="launchMagicPerturbation()">Lanzar Perturbación Mágica</button>
+            <div id="result" class="result"></div>
+            <button id="summonDemonButton" class="button" style="display: none;" onclick="summonDemon()">Invocar Demonio</button>
+            <div id="demonResult" class="result"></div>
+        </div>
     </div>
 
     <script>
-        const table = [
-            "Por suerte o habilidad, el mago logra dar forma al hechizo y cambiar el resultado en el último segundo. Se aplica el máximo resultado posible en el dado de daño o curación del hechizo. Cualquier otro hechizo se lanza sin necesidad de gastar maná.",
-            "El mago consume el maná como si el hechizo hubiera tenido éxito.",
-            "El mago pierde el control del hechizo y necesita un tremendo esfuerzo para evitar que se convierta en un caos total. El mago pierde 3 veces el coste de maná del hechizo.",
-            "La mente del mago se atormenta tras ver ciertas imágenes del Vacío. Pierde 1d3 COR.",
-            "El mago pierde el conocimiento y cae al suelo. Debe realizar un test de CON al inicio de su activación para ver si se despierta.",
-            "Confundido, el Mago se da cuenta de que ha olvidado el hechizo a mitad del lanzamiento. El maná se consume como un hechizo fallido, y no puede volver a usar ese hechizo hasta que haya descansado en un asentamiento.",
-            "Un dolor punzante atraviesa la mente del mago. Pierde 1d6 VIT ignorando armadura o armadura natural.",
-            "Unas visiones del Vacío se representan en las mentes de todos los personajes aliados hasta a 3 casillas. No estando acostumbrados a ver esto, todos los personajes pierden 1d8 COR y el mago pierde 1d3 COR.",
-            "El mago, con su torpeza, abre un portal al Vacío y los demonios lo atraviesan. Tira sobre la tabla de Demonios (a continuación) para ver qué se materializa.",
-            "El mago libera una explosión mágica que causa 1D10 DAÑ a cualquier personaje hasta a 3 casillas, ignorando la armadura y la armadura natural."
-        ];
+        const table = {
+            en: [
+                "Luckily or skillfully, the mage reshapes the spell, maximizing its effect.",
+                "The mage consumes mana as if the spell had succeeded.",
+                "The mage loses control of the spell, expending triple the mana cost.",
+                "The mage's mind is tormented with images from the Void, losing 1d3 SAN.",
+                "The mage falls unconscious and must pass a CON test to awaken.",
+                "Confused, the mage forgets the spell and consumes mana as if it failed.",
+                "A sharp pain strikes the mage's mind, causing 1d6 HP damage (ignores armor).",
+                "Visions of the Void torment all allies within 3 tiles, losing 1d8 SAN.",
+                "The mage opens a Void portal, summoning demons. Roll on the Demon Table.",
+                "A magical explosion deals 1d10 damage to all within 3 tiles (ignores armor)."
+            ],
+            es: [
+                "Por suerte o habilidad, el mago logra dar forma al hechizo y cambiar el resultado en el último segundo.",
+                "El mago consume el maná como si el hechizo hubiera tenido éxito.",
+                "El mago pierde el control del hechizo y necesita un tremendo esfuerzo para evitar el caos.",
+                "La mente del mago se atormenta con imágenes del Vacío. Pierde 1d3 COR.",
+                "El mago pierde el conocimiento y debe realizar un test de CON para despertar.",
+                "Confundido, el mago olvida el hechizo y consume maná como fallido.",
+                "Un dolor punzante atraviesa la mente del mago. Pierde 1d6 VIT (ignora armadura).",
+                "Visiones del Vacío afectan a aliados cercanos, perdiendo 1d8 COR.",
+                "El mago abre un portal al Vacío, invocando demonios. Usa la tabla de demonios.",
+                "Una explosión mágica inflige 1d10 DAÑ a los personajes cercanos (ignora armadura)."
+            ]
+        };
 
-        const demonTable = [
-            { type: "1d3 Diablillos de la plaga", equipment: "-" },
-            { type: "1d3 Demonios de la plaga", equipment: "Roba una carta de arma aleatoria. Armadura 0." },
-            { type: "1d3 Demonios de sangre", equipment: "Roba una carta de arma aleatoria. Armadura 1." },
-            { type: "1 Demonio hinchado", equipment: "2 Hechizos de apoyo, 2 a distancia y 2 a melé." }
-        ];
+        const demonTable = {
+            en: [
+                { type: "1d3 Plague Imps", equipment: "-" },
+                { type: "1d3 Plague Demons", equipment: "Draw a random weapon card. Armor 0." },
+                { type: "1d3 Blood Demons", equipment: "Draw a random weapon card. Armor 1." },
+                { type: "1 Bloated Demon", equipment: "2 Support, 2 Ranged, and 2 Melee spells." }
+            ],
+            es: [
+                { type: "1d3 Diablillos de la plaga", equipment: "-" },
+                { type: "1d3 Demonios de la plaga", equipment: "Roba una carta de arma aleatoria. Armadura 0." },
+                { type: "1d3 Demonios de sangre", equipment: "Roba una carta de arma aleatoria. Armadura 1." },
+                { type: "1 Demonio hinchado", equipment: "2 Hechizos de apoyo, 2 a distancia y 2 a melé." }
+            ]
+        };
 
-        function launchMagicPerturbation() {
-            const randomIndex = Math.floor(Math.random() * table.length);
-            const result = table[randomIndex];
+        async function launchMagicPerturbation() {
+            const language = await detectLanguage();
+            const randomIndex = Math.floor(Math.random() * table[language].length);
+            const result = table[language][randomIndex];
             document.getElementById('result').textContent = result;
 
-            // Show demon summon button if the specific event is triggered
-            if (result.includes("abre un portal al Vacío")) {
+            if (result.includes("Void") || result.includes("Vacío")) {
                 document.getElementById('summonDemonButton').style.display = 'block';
             } else {
                 document.getElementById('summonDemonButton').style.display = 'none';
@@ -128,11 +160,25 @@
             }
         }
 
-        function summonDemon() {
-            const randomIndex = Math.floor(Math.random() * demonTable.length);
-            const demon = demonTable[randomIndex];
+        async function summonDemon() {
+            const language = await detectLanguage();
+            const randomIndex = Math.floor(Math.random() * demonTable[language].length);
+            const demon = demonTable[language][randomIndex];
             document.getElementById('demonResult').textContent = `${demon.type}: ${demon.equipment}`;
         }
+
+        async function detectLanguage() {
+            const storedLang = localStorage.getItem("preferredLanguage");
+            return storedLang || 'en';
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const language = await detectLanguage();
+            document.querySelectorAll('[id^="content-"]').forEach(container => {
+                container.style.display = 'none';
+            });
+            document.getElementById(`content-${language}`).style.display = 'block';
+        });
     </script>
 </body>
 </html>
