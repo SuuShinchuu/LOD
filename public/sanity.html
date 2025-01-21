@@ -84,34 +84,94 @@
     </div>
 
     <script>
-        const afflictions = [
-            { name: "Odio", description: "El Héroe gana el talento Odio contra el tipo de enemigo con el que luchó por última vez. La criatura debe aparecer en la lista del Bestiario." },
-            { name: "Estrés agudo", description: "Pierde 10 DET hasta el final de la misión. El Héroe gritará descontrolado durante las peleas, alertando a cada ser vivo de la mazmorra. El nivel de amenaza gana +1 adicional por cada batalla desde ahora hasta finalizar la misión, y el efecto termina al concluir la misma." },
-            { name: "Trauma persistente", description: "Esta afección no se revelará hasta tu próxima mazmorra, cuando una situación concreta se asemeje o recuerde al personaje al evento que desencadenó todo. Consulta la tabla a continuación. Una vez que se inicia el trauma todas las tiradas de DET serán con -10 y HC tendrá -10. Una vez activado el trauma, durará hasta que abandones la mazmorra." },
-            { name: "Temor a la oscuridad", description: "El Héroe ha desarrollado un miedo irracional a la oscuridad y todas las tiradas de DET serán con -10." },
-            { name: "Aracnofobia", description: "Al Héroe todas las arañas le parecen aterradoras. Todas las batallas serán causantes de terror." },
-            { name: "Asustadizo", description: "Cada ruido inesperado hace que el Héroe salte y grite, asustando a los compañeros y alertando a los enemigos de su presencia. Una tirada de escenario de 10, hará que algo asuste al Héroe y su grito suba el nivel de amenaza en 2." },
-            { name: "Miedo irracional", description: "El Héroe tiene pavor a un tipo de monstruo concreto. Tira al azar entre Orcos, Goblins, Bestias, Muertos, Reptiles o Elfos Oscuros. Todos los monstruos de esa facción ahora causarán miedo al Héroe." },
-            { name: "Claustrofobia", description: "El Héroe tiene problemas en los espacios reducidos y se vuelve más torpe. Todas las habilidades y estadísticas sufrirán -10 en los pasillos." },
-            { name: "Depresión", description: "El Héroe se desgasta lentamente por los horrores recurrentes y cae en un estado de depresión. Por ello, la reserva de energía del personaje se reduce en 2." }
-        ];
+      const afflictions = [
+    {
+        en: { name: "Hatred", description: "The Hero gains the talent Hatred against the type of enemy they last fought. The creature must be listed in the Bestiary." },
+        es: { name: "Odio", description: "El Héroe gana el talento Odio contra el tipo de enemigo con el que luchó por última vez. La criatura debe aparecer en la lista del Bestiario." }
+    },
+    {
+        en: { name: "Acute Stress", description: "Lose 10 DET until the end of the mission. The Hero will shout uncontrollably during battles, alerting every living being in the dungeon. Threat level gains an additional +1 for every battle from now until the mission ends, and the effect concludes with the mission." },
+        es: { name: "Estrés agudo", description: "Pierde 10 DET hasta el final de la misión. El Héroe gritará descontrolado durante las peleas, alertando a cada ser vivo de la mazmorra. El nivel de amenaza gana +1 adicional por cada batalla desde ahora hasta finalizar la misión, y el efecto termina al concluir la misma." }
+    },
+    {
+        en: { name: "Lingering Trauma", description: "This affliction will not reveal itself until your next dungeon, when a specific situation resembles or reminds the character of the triggering event. Refer to the table below. Once trauma is triggered, all DET rolls will have -10, and HC will have -10. Once activated, the trauma will persist until you leave the dungeon." },
+        es: { name: "Trauma persistente", description: "Esta afección no se revelará hasta tu próxima mazmorra, cuando una situación concreta se asemeje o recuerde al personaje al evento que desencadenó todo. Consulta la tabla a continuación. Una vez que se inicia el trauma todas las tiradas de DET serán con -10 y HC tendrá -10. Una vez activado el trauma, durará hasta que abandones la mazmorra." }
+    },
+    {
+        en: { name: "Fear of Darkness", description: "The Hero has developed an irrational fear of darkness, and all DET rolls will have -10." },
+        es: { name: "Temor a la oscuridad", description: "El Héroe ha desarrollado un miedo irracional a la oscuridad y todas las tiradas de DET serán con -10." }
+    },
+    {
+        en: { name: "Arachnophobia", description: "The Hero finds all spiders terrifying. All battles with spiders will cause terror." },
+        es: { name: "Aracnofobia", description: "Al Héroe todas las arañas le parecen aterradoras. Todas las batallas serán causantes de terror." }
+    },
+    {
+        en: { name: "Timid", description: "Every unexpected noise causes the Hero to jump and scream, scaring companions and alerting enemies to their presence. A scenario roll of 10 will result in something scaring the Hero, and their scream will raise the threat level by 2." },
+        es: { name: "Asustadizo", description: "Cada ruido inesperado hace que el Héroe salte y grite, asustando a los compañeros y alertando a los enemigos de su presencia. Una tirada de escenario de 10, hará que algo asuste al Héroe y su grito suba el nivel de amenaza en 2." }
+    },
+    {
+        en: { name: "Irrational Fear", description: "The Hero is terrified of a specific type of monster. Roll randomly between Orcs, Goblins, Beasts, Undead, Reptiles, or Dark Elves. All monsters of that faction will now cause fear to the Hero." },
+        es: { name: "Miedo irracional", description: "El Héroe tiene pavor a un tipo de monstruo concreto. Tira al azar entre Orcos, Goblins, Bestias, Muertos, Reptiles o Elfos Oscuros. Todos los monstruos de esa facción ahora causarán miedo al Héroe." }
+    },
+    {
+        en: { name: "Claustrophobia", description: "The Hero has trouble in confined spaces and becomes clumsier. All abilities and stats will suffer -10 in hallways." },
+        es: { name: "Claustrofobia", description: "El Héroe tiene problemas en los espacios reducidos y se vuelve más torpe. Todas las habilidades y estadísticas sufrirán -10 en los pasillos." }
+    },
+    {
+        en: { name: "Depression", description: "The Hero is slowly worn down by recurring horrors and falls into a state of depression. As a result, the character's energy pool is reduced by 2." },
+        es: { name: "Depresión", description: "El Héroe se desgasta lentamente por los horrores recurrentes y cae en un estado de depresión. Por ello, la reserva de energía del personaje se reduce en 2." }
+    }
+];
 
-        const triggers = [
-            "El grupo activa una trampa.",
-            "Cae un rastrillo.",
-            "VIT de compañero es reducida a 0.",
-            "Una perturbación en el grupo.",
-            "El grupo se toma un descanso.",
-            "El grupo abre un cofre."
-        ];
 
-        function takeSanityAffliction() {
+const triggers = [
+    {
+        en: { description: "The group triggers a trap." },
+        es: { description: "El grupo activa una trampa." }
+    },
+    {
+        en: { description: "A portcullis falls." },
+        es: { description: "Cae un rastrillo." }
+    },
+    {
+        en: { description: "A companion's VIT is reduced to 0." },
+        es: { description: "VIT de compañero es reducida a 0." }
+    },
+    {
+        en: { description: "A disturbance in the group." },
+        es: { description: "Una perturbación en el grupo." }
+    },
+    {
+        en: { description: "The group takes a rest." },
+        es: { description: "El grupo se toma un descanso." }
+    },
+    {
+        en: { description: "The group opens a chest." },
+        es: { description: "El grupo abre un cofre." }
+    }
+];
+
+
+        async function detectLanguage() {
+            const storedLang = localStorage.getItem("preferredLanguage");
+            console.log('Stored language:', storedLang);
+            return storedLang || 'en';
+        }
+
+        async function takeSanityAffliction() {
+            const lang = await detectLanguage();
             const randomIndex = Math.floor(Math.random() * afflictions.length);
             const affliction = afflictions[randomIndex];
-            document.getElementById('result').innerHTML = `<h2>${affliction.name}</h2><p>${affliction.description}</p>`;
+            const localizedAffliction = affliction[lang];
+            
+            document.getElementById('result').innerHTML = `
+                <h2>${localizedAffliction.name}</h2>
+                <p>${localizedAffliction.description}</p>
+            `;
 
-            // Show trigger button if Trauma Persistente is selected
-            if (affliction.name === "Trauma persistente") {
+            // Show trigger button if Lingering Trauma/Trauma persistente is selected
+            if ((lang === 'en' && localizedAffliction.name === "Lingering Trauma") || 
+                (lang === 'es' && localizedAffliction.name === "Trauma persistente")) {
                 document.getElementById('triggerButton').style.display = 'block';
             } else {
                 document.getElementById('triggerButton').style.display = 'none';
@@ -119,10 +179,11 @@
             }
         }
 
-        function defineTrigger() {
+        async function defineTrigger() {
+            const lang = await detectLanguage();
             const randomIndex = Math.floor(Math.random() * triggers.length);
             const trigger = triggers[randomIndex];
-            document.getElementById('triggerResult').textContent = trigger;
+            document.getElementById('triggerResult').textContent = trigger[lang].description;
         }
     </script>
 </body>
