@@ -152,8 +152,8 @@
             const result = table[language][randomIndex];
             document.getElementById('result').textContent = result;
 
-            if ((language === 'en' && result.includes("summoning demons")) || 
-                (language === 'es' && result.includes("invocando demonios"))) {
+            if ((language === 'en' && result.includes("demons")) || 
+                (language === 'es' && result.includes("demonios"))) {
                 document.getElementById('summonDemonButton').style.display = 'block';
             } else {
                 document.getElementById('summonDemonButton').style.display = 'none';
