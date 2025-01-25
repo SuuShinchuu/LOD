@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
         console.log('Received data:', { email, comment });
 
-        // Log missing comment
+        // Ensure 'comment' is provided
         if (!comment || comment.trim() === '') {
             console.error('Error: Missing or empty comment field');
             return res.status(400).json({ success: false, error: 'Comment is required' });
@@ -50,8 +50,21 @@ module.exports = async (req, res) => {
 
             console.log('Airtable API response status:', response.status);
 
-            const data = await response.json();
-            console.log('Airtable API response data:', data);
+            // Try parsing the response as JSON
+            const textResponse = await response.text();
+            console.log('Raw Airtable response:', textResponse);
+
+            let data;
+            try {
+                data = JSON.parse(textResponse);
+            } catch (jsonError) {
+                console.error('Error parsing Airtable response as JSON:', jsonError);
+                return res.status(500).json({
+                    success: false,
+                    error: 'Invalid JSON received from Airtable',
+                    rawResponse: textResponse,
+                });
+            }
 
             // Check for Airtable errors
             if (!response.ok) {
@@ -62,7 +75,7 @@ module.exports = async (req, res) => {
                 });
             }
 
-            // Success response
+            // Success
             console.log('Feedback submitted successfully:', data);
             res.status(200).json({ success: true, data });
         } catch (error) {
