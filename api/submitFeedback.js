@@ -21,6 +21,14 @@ module.exports = async (req, res) => {
         }
 
         try {
+            // Log de los datos enviados para depuración
+            console.log('Datos enviados a Airtable:', {
+                fields: {
+                    Email: email || '', // Email opcional
+                    Comment: comment,  // Comment obligatorio
+                },
+            });
+
             // Enviar datos a Airtable
             const response = await fetch(`https://api.airtable.com/v0/${appId}/Feedback`, {
                 method: 'POST',
@@ -47,7 +55,7 @@ module.exports = async (req, res) => {
             // Éxito: Devolver datos al cliente
             res.status(200).json({ success: true, data });
         } catch (error) {
-            console.error('Error al enviar feedback:', error);
+            console.error('Error al enviar feedback:', error.message);
             res.status(500).json({ success: false, error: error.message });
         }
     } else {
