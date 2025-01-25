@@ -260,25 +260,32 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM fully loaded and parsed');
             const submitButton = document.getElementById('submitFeedback');
     
             if (submitButton) {
+                console.log('Submit button found. Adding click event listener...');
                 submitButton.addEventListener('click', function () {
+                    console.log('Submit button clicked! Preparing to send feedback...');
                     const email = document.getElementById('feedbackEmail').value;
                     const comment = document.getElementById('feedbackComment').value;
                     const emailError = document.getElementById('emailError');
     
-                    // Reinicia el mensaje de error
+                    console.log('Collected form data:', { email, comment });
+    
+                    // Reset error display
                     emailError.style.display = 'none';
     
-                    // Validar formato de email
+                    // Validate email format
                     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (email && !emailPattern.test(email)) {
+                        console.error('Invalid email format');
                         emailError.style.display = 'block';
-                        return; // Detener si el email es inválido
+                        return;
                     }
     
-                    // Realizar fetch al backend
+                    // Send POST request to the backend
+                    console.log('Sending POST request to /api/submitFeedback...');
                     fetch('/api/submitFeedback', {
                         method: 'POST',
                         headers: {
@@ -289,21 +296,38 @@
                             comment: comment,
                         }),
                     })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            console.log('Éxito:', data);
-                            // Ocultar formulario y mostrar mensaje de agradecimiento
-                            document.getElementById('feedbackForm').style.display = 'none';
-                            document.getElementById('thankYouMessage').style.display = 'block';
+                        .then((response) => {
+                            console.log('Received response from backend:', response);
+    
+                            // Attempt to parse JSON and log the response body
+                            return response
+                                .json()
+                                .then((data) => {
+                                    console.log('Parsed JSON response:', data);
+                                    if (response.ok) {
+                                        // Success: Hide form and show thank you message
+                                        document.getElementById('feedbackForm').style.display = 'none';
+                                        document.getElementById('thankYouMessage').style.display = 'block';
+                                    } else {
+                                        throw new Error(data.error || 'Unknown error occurred');
+                                    }
+                                })
+                                .catch((jsonError) => {
+                                    console.error('Failed to parse JSON response:', jsonError);
+                                    throw new Error('Invalid JSON received from server');
+                                });
                         })
                         .catch((error) => {
-                            console.error('Error:', error);
-                            // Opcional: puedes mostrar un mensaje de error al usuario aquí
+                            console.error('Error submitting feedback:', error);
+                            // Optionally show an error message to the user
                         });
                 });
+            } else {
+                console.error('Submit button not found in the DOM');
             }
         });
     </script>
+    
     
 </body>
 </html>
