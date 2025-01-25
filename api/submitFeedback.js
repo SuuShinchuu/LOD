@@ -4,32 +4,34 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
         const { email, comment } = req.body;
 
-        // Validar que 'comment' tenga datos
+        // Ensure 'comment' is provided
         if (!comment || comment.trim() === '') {
+            console.error('Error: Missing comment field');
             return res.status(400).json({ success: false, error: 'Comment is required' });
         }
 
-        // Validar configuración de las variables de entorno
+        // Validate environment variables
         const appId = process.env.AIRTABLE_APP_ID;
         const apiKey = process.env.AIRTABLE_API_KEY;
 
         if (!appId || !apiKey) {
-            console.error('Variables de entorno faltantes:', { appId, apiKey });
-            return res
-                .status(500)
-                .json({ success: false, error: 'Server configuration is invalid. Check environment variables.' });
+            console.error('Error: Missing environment variables', { appId, apiKey });
+            return res.status(500).json({
+                success: false,
+                error: 'Server configuration is invalid. Check environment variables.',
+            });
         }
 
         try {
-            // Log de los datos enviados para depuración
-            console.log('Datos enviados a Airtable:', {
+            // Debug: Log the data being sent
+            console.log('Sending data to Airtable:', {
                 fields: {
-                    Email: email || '', // Email opcional
-                    Comment: comment,  // Comment obligatorio
+                    Email: email || '', // Email is optional
+                    Comment: comment,  // Comment is mandatory
                 },
             });
 
-            // Enviar datos a Airtable
+            // Send data to Airtable
             const response = await fetch(`https://api.airtable.com/v0/${appId}/Feedback`, {
                 method: 'POST',
                 headers: {
@@ -38,24 +40,28 @@ module.exports = async (req, res) => {
                 },
                 body: JSON.stringify({
                     fields: {
-                        Email: email || '', // Email opcional (vacío si no se proporciona)
-                        Comment: comment,  // Comment obligatorio
+                        Email: email || '',
+                        Comment: comment,
                     },
                 }),
             });
 
             const data = await response.json();
 
-            // Verificar si Airtable devolvió un error
+            // If Airtable returns an error
             if (!response.ok) {
-                console.error('Error de Airtable:', data);
-                throw new Error(data.error?.message || 'Failed to submit feedback to Airtable');
+                console.error('Airtable response error:', data);
+                return res.status(500).json({
+                    success: false,
+                    error: data.error?.message || 'Failed to submit feedback to Airtable',
+                });
             }
 
-            // Éxito: Devolver datos al cliente
+            // Success
+            console.log('Feedback submitted successfully:', data);
             res.status(200).json({ success: true, data });
         } catch (error) {
-            console.error('Error al enviar feedback:', error.message);
+            console.error('Unexpected server error:', error.message);
             res.status(500).json({ success: false, error: error.message });
         }
     } else {
