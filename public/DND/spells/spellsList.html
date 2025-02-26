@@ -219,6 +219,7 @@
             document.getElementById("popup-title").textContent = spell.name;
             document.getElementById("popup-content").innerHTML = `
                 <p><strong>Level:</strong> ${spell.level}</p>
+                <p><strong>Range:</strong> ${spell.range}</p>
                 <p><strong>Duration:</strong> ${spell.duration}</p>
                 <p><strong>Components:</strong> ${spell.components.join(", ")}</p>
                 <p><strong>Material:</strong> ${spell.material || "None"}</p>
