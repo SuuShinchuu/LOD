@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Spells</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .class-section, .level-section {
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .level-section {
+            margin-left: 20px;
+            background-color: #ccc;
+        }
+        .spell-list {
+            display: none;
+            padding-left: 20px;
+        }
+        .spell-list a {
+            display: block;
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px 0;
+            cursor: pointer;
+        }
+        .spell-list a:hover {
+            text-decoration: underline;
+        }
+        .expand-button {
+            font-weight: bold;
+            color: #444;
+        }
+        /* Popup Styles */
+        #spell-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        #spell-popup h2 {
+            margin-top: 0;
+        }
+        #spell-popup p {
+            font-size: 14px;
+            color: #333;
+        }
+        #close-popup {
+            display: block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            border: none;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            border-radius: 5px;
+        }
+        #close-popup:hover {
+            background: #c82333;
+        }
+        /* Background overlay */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>D&D Spells</h1>
+    <!-- Removed search input -->
+    <!-- <input type="text" id="search" placeholder="Search spells..." onkeyup="filterSpells()"> -->
+    <div id="spells-container"></div>
+
+    <!-- Popup for Spell Details -->
+    <div id="overlay"></div>
+    <div id="spell-popup">
+        <h2 id="popup-title"></h2>
+        <p id="popup-content"></p>
+        <button id="close-popup">Close</button>
+    </div>
+
+    <script>
+        async function loadSpells() {
+            try {
+                console.log("Loading spells-data.json...");
+                const response = await fetch("spells-data.json");
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const spells = await response.json();
+                console.log(`Loaded ${spells.length} spells.`);
+
+                if (!Array.isArray(spells)) {
+                    throw new Error("Invalid JSON format: Expected an array.");
+                }
+
+                const organizedSpells = {};
+
+                spells.forEach(spell => {
+                    if (!spell.classes || !Array.isArray(spell.classes)) {
+                        console.warn(`Skipping spell without classes: ${spell.name}`);
+                        return;
+                    }
+
+                    spell.classes.forEach(cls => {
+                        if (!organizedSpells[cls.name]) organizedSpells[cls.name] = {};
+                        if (!organizedSpells[cls.name][spell.level]) organizedSpells[cls.name][spell.level] = [];
+                        organizedSpells[cls.name][spell.level].push(spell);
+                    });
+                });
+
+                console.log("Organized spells by class and level.");
+                displaySpells(organizedSpells);
+            } catch (error) {
+                console.error("Error loading spells:", error);
+                document.getElementById("spells-container").innerHTML = "<p style='color: red;'>Failed to load spells.</p>";
+            }
+        }
+
+        function displaySpells(organizedSpells) {
+            const container = document.getElementById("spells-container");
+            container.innerHTML = "";
+
+            Object.entries(organizedSpells).forEach(([className, levels]) => {
+                const classSection = document.createElement("div");
+                classSection.classList.add("class-section");
+                classSection.innerHTML = `<span class="expand-button">▶</span> <strong>${className}</strong>`;
+                classSection.onclick = () => toggleVisibility(classSection, "class");
+
+                const levelContainer = document.createElement("div");
+                levelContainer.style.display = "none";
+
+                Object.entries(levels).sort(([a], [b]) => a - b).forEach(([level, spells]) => {
+                    const levelSection = document.createElement("div");
+                    levelSection.classList.add("level-section");
+                    levelSection.innerHTML = `<span class="expand-button">▶</span> Level ${level}`;
+                    levelSection.onclick = (event) => {
+                        event.stopPropagation();
+                        toggleVisibility(levelSection, "level");
+                    };
+
+                    const spellList = document.createElement("div");
+                    spellList.classList.add("spell-list");
+
+                    spells.forEach(spell => {
+                        const spellLink = document.createElement("a");
+                        spellLink.textContent = spell.name;
+                        spellLink.href = "#";
+                        spellLink.onclick = (event) => {
+                            event.preventDefault();
+                            showSpellDetails(spell);
+                        };
+                        spellList.appendChild(spellLink);
+                    });
+
+                    levelSection.appendChild(spellList);
+                    levelContainer.appendChild(levelSection);
+                });
+
+                classSection.appendChild(levelContainer);
+                container.appendChild(classSection);
+            });
+        }
+
+        function toggleVisibility(element, type) {
+            const content = element.querySelector(type === "class" ? "div" : ".spell-list");
+            const button = element.querySelector(".expand-button");
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+                button.textContent = "▼";
+            } else {
+                content.style.display = "none";
+                button.textContent = "▶";
+            }
+        }
+
+        function showSpellDetails(spell) {
+            document.getElementById("popup-title").textContent = spell.name;
+            document.getElementById("popup-content").innerHTML = `
+                <p><strong>Level:</strong> ${spell.level}</p>
+                <p><strong>Duration:</strong> ${spell.duration}</p>
+                <p><strong>Components:</strong> ${spell.components.join(", ")}</p>
+                <p><strong>Material:</strong> ${spell.material || "None"}</p>
+                <p><strong>Concentration:</strong> ${spell.concentration ? "Yes" : "No"}</p>
+                <p><strong>Casting Time:</strong> ${spell.casting_time}</p>
+                <p><strong>School:</strong> ${spell.school.name}</p>
+                <p><strong>Description:</strong> ${spell.desc.join(" ")}</p>
+            `;
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("spell-popup").style.display = "block";
+        }
+
+        document.getElementById("close-popup").onclick = () => {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("spell-popup").style.display = "none";
+        };
+
+        loadSpells();
+    </script>
+
+    <!-- Footer Section -->
+    <footer style="text-align: center; margin-top: 20px;">
+        <a href="spells/spellsList.html">To the Spells List</a>
+    </footer>
+
+</body>
+</html>
