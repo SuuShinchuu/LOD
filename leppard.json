@@ -1,0 +1,147 @@
+{
+  "id": 1,
+  "name": "Leppard",
+  "notes": "LE-O-PAR-DO",
+  "sections": [
+    {
+      "id": 1,
+      "name": "Character",
+      "stats": [
+        {
+          "id": 1,
+          "name": "Name",
+          "value": "Leppard"
+        },
+        {
+          "id": 2,
+          "name": "Class",
+          "value": "Warrior"
+        },
+        {
+          "id": 3,
+          "name": "Level",
+          "value": "2"
+        },
+        {
+          "id": 4,
+          "name": "Experience",
+          "value": "300"
+        },
+        {
+          "id": 5,
+          "name": "Hit Points",
+          "value": "20/20"
+        },
+        {
+          "id": 6,
+          "name": "Armour Class",
+          "value": "18"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Attributes",
+      "stats": [
+        {
+          "id": 1,
+          "name": "Strength",
+          "value": "20 (+5)"
+        },
+        {
+          "id": 2,
+          "name": "Intelligence",
+          "value": "10 (0)"
+        },
+        {
+          "id": 3,
+          "name": "Wisdom",
+          "value": "13 (+1)"
+        },
+        {
+          "id": 4,
+          "name": "Dexterity",
+          "value": "14 (+2)"
+        },
+        {
+          "id": 5,
+          "name": "Constitution",
+          "value": "15 (+2)"
+        },
+        {
+          "id": 6,
+          "name": "Charisma",
+          "value": "12 (+1)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Saves",
+      "stats": [
+        {
+          "id": 1,
+          "name": "Strength",
+          "value": "7"
+        },
+        {
+          "id": 2,
+          "name": "Dexterity",
+          "value": "2"
+        },
+        {
+          "id": 3,
+          "name": "Constitution",
+          "value": "4"
+        },
+        {
+          "id": 4,
+          "name": "Intelligence",
+          "value": "0"
+        },
+        {
+          "id": 5,
+          "name": "Wisdom",
+          "value": "1"
+        },
+        {
+          "id": 6,
+          "name": "Charisma",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Weapons",
+      "stats": [
+        {
+          "id": 1,
+          "name": "Longsword",
+          "value": "1d8+7"
+        },
+        {
+          "id": 2,
+          "name": "Ballesta",
+          "value": "1d8"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Inventory",
+      "stats": [
+        {
+          "id": 1,
+          "name": "A book",
+          "value": "1lb"
+        },
+        {
+          "id": 2,
+          "name": "A bag of rocks",
+          "value": "10lb"
+        }
+      ]
+    }
+  ]
+}

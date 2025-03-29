@@ -1,0 +1,42 @@
+{
+  "id": 4,
+  "name": "Xara",
+  "class": "Brujo",
+  "level": 2,
+  "race": "Tiefling",
+  "background": "Huérfana",
+  "alignment": "Caótico Neutral",
+  "hit_points": "15/15",
+  "armor_class": 13,
+  "speed": 30,
+  "attributes": {
+    "strength": 14,
+    "dexterity": 15,
+    "constitution": 12,
+    "intelligence": 10,
+    "wisdom": 8,
+    "charisma": 18
+  },
+  "weapons": [
+    {
+      "name": "Hachuela",
+      "damage": "1d6+2"
+    },
+    {
+      "name": "Daga",
+      "damage": "1d4+2"
+    }
+  ],
+  "inventory": [
+    "Conjurador Arcano",
+    "Paquete de Explorador",
+    "Armadura Ligera"
+  ],
+  "traits": {
+    "personality": "No filtra lo que dice",
+    "ideals": "Evitar que el mal prospere",
+    "bonds": "Aconseguir oro",
+    "flaws": "Resistente al fuego, pero teme el agua"
+  }
+}
+

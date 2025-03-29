@@ -1,0 +1,37 @@
+{
+  "id": 2,
+  "name": "Rappel",
+  "class": "Hechicero",
+  "level": 2,
+  "race": "Humano",
+  "background": "Charlatán",
+  "alignment": "Caótico Neutral",
+  "hit_points": "14/14",
+  "armor_class": 10,
+  "speed": 30,
+  "attributes": {
+    "strength": 9,
+    "dexterity": 12,
+    "constitution": 14,
+    "intelligence": 7,
+    "wisdom": 9,
+    "charisma": 18
+  },
+  "weapons": [
+    {
+      "name": "Daga",
+      "damage": "1d4"
+    }
+  ],
+  "inventory": [
+    "Útiles de disfraz",
+    "Ballesta Ligera"
+  ],
+  "traits": {
+    "personality": "Sarcasmo infinito",
+    "ideals": "Espíritu libre",
+    "bonds": "No puede resistirse a una estafa",
+    "flaws": "Múltiples identidades falsas"
+  }
+}
+

@@ -1,0 +1,42 @@
+{
+  "id": 3,
+  "name": "Kyth",
+  "class": "Druida",
+  "level": 2,
+  "race": "Dracónido",
+  "background": "Hermitano",
+  "alignment": "Neutral Bueno",
+  "hit_points": "17/17",
+  "armor_class": 13,
+  "speed": 30,
+  "attributes": {
+    "strength": 18,
+    "dexterity": 10,
+    "constitution": 15,
+    "intelligence": 16,
+    "wisdom": 14,
+    "charisma": 12
+  },
+  "weapons": [
+    {
+      "name": "Garra",
+      "damage": "1d6+4"
+    },
+    {
+      "name": "Aliento de Dragón",
+      "damage": "2d6"
+    }
+  ],
+  "inventory": [
+    "Escudo de Madera",
+    "Armadura de Cuero",
+    "Foco Druídico"
+  ],
+  "traits": {
+    "personality": "Todo lo que surge está conectado",
+    "ideals": "El bien mayor",
+    "bonds": "Compromiso con el equilibrio",
+    "flaws": "Resistente al fuego, pero odia el frío"
+  }
+}
+
