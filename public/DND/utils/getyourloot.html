@@ -24,7 +24,7 @@
     const clientId = crypto.randomUUID();
 
     const tablaObjetos = [
-      "Staff of Courage",
+      "Staff of the Python",
       "Medallion of Resistance",
       "Boots of Silent Path",
       "Challenger's Sash",
@@ -47,57 +47,33 @@
       "Staff of Greater Power"
     ];
 
-    const pociones = {
-      infrecuente: [
-        "Potion of Fire Breath",
-        "Potion of Growth",
-        "2x Greater Healing Potion",
-        "Potion of Resistance",
-        "Potion of Water Breathing",
-        "Poison Potion"
-      ],
-      rara: [
-        "Potion of Gaseous Form",
-        "Potion of Frost Giant Strength",
-        "Potion of Heroism",
-        "Potion of Invisibility",
-        "Potion of Invulnerability",
-        "2x Greater Healing Potion"
-      ],
-      muy_rara: [
-        "Potion of Enhanced Resistance",
-        "Potion of Haste",
-        "Potion of Levitation",
-        "Potion of Flying",
-        "2x Full Healing Potion",
-        "Storm Giant's Potion"
-      ]
-    };
-
     let isAnimating = false;
 
     function tirar(tipo) {
       if (tipo === 'objeto') {
         const resultadoRef = ref(db, `tiradas/objeto`);
+        const tirada = Math.floor(Math.random() * tablaObjetos.length);
         set(resultadoRef, {
           estado: 'tirando',
           startedAt: Date.now(),
-          startedBy: clientId
+          startedBy: clientId,
+          resultadoIndex: tirada
         });
       }
     }
 
-    function animarTiradaObjeto(callback) {
+    function animarTiradaObjeto(indexFinal, callback) {
       if (isAnimating) return;
       isAnimating = true;
       let i = 0;
-      const vueltas = 30 + Math.floor(Math.random() * 20);
+      const vueltas = 30;
+      const totalPasos = vueltas + indexFinal;
       const div = document.getElementById("resultado-objeto");
       const intervalo = setInterval(() => {
         const index = i % tablaObjetos.length;
         div.innerHTML = `<strong>${tablaObjetos[index]}</strong>`;
         i++;
-        if (i > vueltas) {
+        if (i > totalPasos) {
           clearInterval(intervalo);
           isAnimating = false;
           if (callback) callback();
@@ -105,13 +81,12 @@
       }, 75);
     }
 
-    function finalizarTiradaObjeto() {
+    function finalizarTiradaObjeto(indexFinal) {
       const resultadoRef = ref(db, `tiradas/objeto`);
-      const tirada = Math.floor(Math.random() * tablaObjetos.length);
-      const objeto = tablaObjetos[tirada];
+      const objeto = tablaObjetos[indexFinal];
       set(resultadoRef, {
         estado: 'resultado',
-        tirada: tirada + 1,
+        tirada: indexFinal + 1,
         objeto
       });
     }
@@ -128,48 +103,16 @@
 
         if (tipo === "objeto") {
           if (data.estado === 'tirando') {
-            animarTiradaObjeto(() => {
+            animarTiradaObjeto(data.resultadoIndex, () => {
               if (data.startedBy === clientId) {
-                finalizarTiradaObjeto();
+                finalizarTiradaObjeto(data.resultadoIndex);
               }
             });
           } else if (data.estado === 'resultado') {
-            if (!isAnimating) {
-              div.innerHTML = `<strong>${data.objeto}</strong>`;
-            } else {
-              setTimeout(() => {
-                div.innerHTML = `<strong>${data.objeto}</strong>`;
-              }, 2500);
-            }
-          }
-        } else if (tipo === "pocion") {
-          if (data.paso === 1) {
-            ultimaTipo = data.tipo;
-            div.innerHTML = `Roll: ${data.tiradaTipo}<br>Type: <strong>${data.tipo}</strong><br><button onclick='tirarPocionFinal()'>Roll 1d6</button>`;
-          } else if (data.paso === 2) {
-            div.innerHTML = `Potion obtained: <strong>${data.resultadoFinal}</strong>`;
-          } else {
-            div.innerHTML = "Ready to roll.";
+            div.innerHTML = `<strong>${data.objeto}</strong>`;
           }
         }
       });
-    }
-
-    function tirarPocion() {
-      const tiradaTipo = Math.floor(Math.random() * 20) + 1;
-      let tipo;
-      if (tiradaTipo <= 10) tipo = "infrecuente";
-      else if (tiradaTipo <= 16) tipo = "rara";
-      else tipo = "muy_rara";
-
-      const resultadoRef = ref(db, `tiradas/pocion`);
-      set(resultadoRef, { tiradaTipo, tipo, paso: 1 });
-    }
-
-    function tirarPocionFinal() {
-      const dado = Math.floor(Math.random() * 6);
-      const resultadoRef = ref(db, `tiradas/pocion`);
-      set(resultadoRef, { tiradaTipo: null, tipo: null, resultadoFinal: pociones[ultimaTipo][dado], paso: 2 });
     }
 
     function resetear(tipo) {
@@ -177,16 +120,11 @@
       remove(resultadoRef);
     }
 
-    let ultimaTipo = null;
-
     window.tirar = tirar;
-    window.tirarPocion = tirarPocion;
-    window.tirarPocionFinal = tirarPocionFinal;
     window.resetear = resetear;
 
     window.onload = () => {
       actualizarVista('objeto');
-      actualizarVista('pocion');
     };
   </script>
   <style>
@@ -225,10 +163,5 @@
   <button onclick="tirar('objeto')">Roll Magic Item</button>
   <button onclick="resetear('objeto')">Reset</button>
   <div id="resultado-objeto" class="resultado">Loading...</div>
-
-  <h2>Potion</h2>
-  <button onclick="tirarPocion()">Roll Potion Type</button>
-  <button onclick="resetear('pocion')">Reset</button>
-  <div id="resultado-pocion" class="resultado">Loading...</div>
 </body>
 </html>
