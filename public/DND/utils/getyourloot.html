@@ -21,6 +21,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    const clientId = crypto.randomUUID();
+
     const tablaObjetos = [
       "Bastó de la Pitó",
       "Medalló de Resistència",
@@ -52,7 +54,8 @@
         const resultadoRef = ref(db, `tiradas/objeto`);
         set(resultadoRef, {
           estado: 'tirando',
-          startedAt: Date.now()
+          startedAt: Date.now(),
+          startedBy: clientId
         });
       }
     }
@@ -96,11 +99,9 @@
         if (tipo === "objeto") {
           if (data.estado === 'tirando') {
             animarTiradaObjeto(() => {
-              get(resultadoRef).then(snap => {
-                if (snap.val().estado === 'tirando') {
-                  finalizarTiradaObjeto();
-                }
-              });
+              if (data.startedBy === clientId) {
+                finalizarTiradaObjeto();
+              }
             });
           } else if (data.estado === 'resultado') {
             div.innerHTML = `<strong>${data.objeto}</strong>`;
