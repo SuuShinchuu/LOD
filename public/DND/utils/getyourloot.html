@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tirada compartida - D&D</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcFbVX7eh98iQ71E6GjWF40ai-qWPVTY8",
+      authDomain: "getyourloot-ab15a.firebaseapp.com",
+      databaseURL: "https://getyourloot-ab15a-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "getyourloot-ab15a",
+      storageBucket: "getyourloot-ab15a.appspot.com",
+      messagingSenderId: "398987786235",
+      appId: "1:398987786235:web:17c236affdb8e920cabd5e",
+      measurementId: "G-30056BD62B"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const tablaObjetos = [
+      { min: 1, max: 20, objeto: "Poción de curación" },
+      { min: 21, max: 40, objeto: "Espada corta +1" },
+      { min: 41, max: 60, objeto: "Capa de invisibilidad (limitada)" },
+      { min: 61, max: 80, objeto: "Anillo de protección +1" },
+      { min: 81, max: 95, objeto: "Varita de misiles mágicos" },
+      { min: 96, max: 100, objeto: "Objeto legendario aleatorio" }
+    ];
+
+    const tablaPociones = [
+      { min: 1, max: 50, objeto: "Poción de curación menor" },
+      { min: 51, max: 80, objeto: "Poción de resistencia" },
+      { min: 81, max: 95, objeto: "Poción de velocidad" },
+      { min: 96, max: 100, objeto: "Poción de invulnerabilidad" }
+    ];
+
+    function obtenerObjeto(tirada, tabla) {
+      return tabla.find(entry => tirada >= entry.min && tirada <= entry.max)?.objeto || "Nada encontrado";
+    }
+
+    function tirar(tipo) {
+      const tirada = Math.floor(Math.random() * 100) + 1;
+      const objeto = obtenerObjeto(tirada, tipo === 'objeto' ? tablaObjetos : tablaPociones);
+      const resultadoRef = ref(db, `tiradas/${tipo}`);
+      set(resultadoRef, { tirada, objeto });
+    }
+
+    function actualizarVista(tipo) {
+      const resultadoRef = ref(db, `tiradas/${tipo}`);
+      onValue(resultadoRef, (snapshot) => {
+        const data = snapshot.val();
+        const div = document.getElementById(`resultado-${tipo}`);
+        if (data) {
+          div.innerHTML = `Resultado: ${data.tirada}<br><strong>${data.objeto}</strong>`;
+        } else {
+          div.innerHTML = "Todavía no se ha tirado.";
+        }
+      });
+    }
+
+    window.tirar = tirar;
+    window.onload = () => {
+      actualizarVista('objeto');
+      actualizarVista('pocion');
+    };
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f2f2f2;
+      padding: 2rem;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      margin: 1rem;
+      cursor: pointer;
+    }
+    .resultado {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 5px #ccc;
+      display: inline-block;
+      min-width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Get Your Loot 🧙‍♂️</h1>
+
+  <h2>Objeto Mágico</h2>
+  <button onclick="tirar('objeto')">Tirar Objeto Mágico</button>
+  <div id="resultado-objeto" class="resultado">Cargando...</div>
+
+  <h2>Poción</h2>
+  <button onclick="tirar('pocion')">Tirar Poción</button>
+  <div id="resultado-pocion" class="resultado">Cargando...</div>
+</body>
+</html>
