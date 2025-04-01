@@ -22,12 +22,27 @@
     const db = getDatabase(app);
 
     const tablaObjetos = [
-      { min: 1, max: 20, objeto: "Poción de curación" },
-      { min: 21, max: 40, objeto: "Espada corta +1" },
-      { min: 41, max: 60, objeto: "Capa de invisibilidad (limitada)" },
-      { min: 61, max: 80, objeto: "Anillo de protección +1" },
-      { min: 81, max: 95, objeto: "Varita de misiles mágicos" },
-      { min: 96, max: 100, objeto: "Objeto legendario aleatorio" }
+      "Bastó de la Pitó",
+      "Medalló de Resistència",
+      "Botes del Camí Silenciós",
+      "Gunyó del Desafiat",
+      "Anell de Reacció Ràpida",
+      "Gavinet del Guarda",
+      "Moneda de la Sort del Veterà",
+      "Bracer de Reflexos Ràpids",
+      "Cinturó de l'Endurança",
+      "Bastó del poder Menor",
+      "Anell de l’Evasió Astuta",
+      "Braçalet de l’Escudat",
+      "Braçals +2 CA",
+      "Guants de la Presa Firme",
+      "Capa del Charlatán",
+      "Bastó d’enjambre d’insectes",
+      "Capa de les Ombres",
+      "Anell de la Fúria Controlada",
+      "Escut de la Resistència",
+      "Arma Executer Menor",
+      "Bastó de poder menor"
     ];
 
     const pociones = {
@@ -57,15 +72,27 @@
       ]
     };
 
-    function obtenerObjeto(tirada, tabla) {
-      return tabla.find(entry => tirada >= entry.min && tirada <= entry.max)?.objeto || "Nada encontrado";
+    function tirar(tipo) {
+      if (tipo === 'objeto') {
+        animarTiradaObjeto();
+      }
     }
 
-    function tirar(tipo) {
-      const tirada = Math.floor(Math.random() * 100) + 1;
-      const objeto = obtenerObjeto(tirada, tablaObjetos);
-      const resultadoRef = ref(db, `tiradas/${tipo}`);
-      set(resultadoRef, { tirada, objeto });
+    function animarTiradaObjeto() {
+      const resultadoRef = ref(db, `tiradas/objeto`);
+      let i = 0;
+      const vueltas = 30 + Math.floor(Math.random() * 20);
+      const intervalo = setInterval(() => {
+        const index = i % tablaObjetos.length;
+        document.getElementById("resultado-objeto").innerHTML = `<strong>${tablaObjetos[index]}</strong>`;
+        i++;
+        if (i > vueltas) {
+          clearInterval(intervalo);
+          const tirada = Math.floor(Math.random() * tablaObjetos.length);
+          const objeto = tablaObjetos[tirada];
+          set(resultadoRef, { tirada: tirada + 1, objeto });
+        }
+      }, 75);
     }
 
     function tirarPocion() {
@@ -103,7 +130,7 @@
         }
 
         if (tipo === "objeto") {
-          div.innerHTML = `Resultado: ${data.tirada}<br><strong>${data.objeto}</strong>`;
+          div.innerHTML = `<strong>${data.objeto}</strong>`;
         } else if (tipo === "pocion") {
           if (data.paso === 1) {
             ultimaTipo = data.tipo;
@@ -152,6 +179,7 @@
       box-shadow: 0 0 5px #ccc;
       display: inline-block;
       min-width: 200px;
+      min-height: 60px;
     }
   </style>
 </head>
