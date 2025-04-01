@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Get Your Loot 🧙‍♂️</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue, remove, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDcFbVX7eh98iQ71E6GjWF40ai-qWPVTY8",
@@ -24,30 +24,57 @@
     const clientId = crypto.randomUUID();
 
     const tablaObjetos = [
-      "Bastó de la Pitó",
-      "Medalló de Resistència",
-      "Botes del Camí Silenciós",
-      "Gunyó del Desafiat",
-      "Anell de Reacció Ràpida",
-      "Gavinet del Guarda",
-      "Moneda de la Sort del Veterà",
-      "Bracer de Reflexos Ràpids",
-      "Cinturó de l'Endurança",
-      "Bastó del poder Menor",
-      "Anell de l’Evasió Astuta",
-      "Braçalet de l’Escudat",
-      "Braçals +2 CA",
-      "Guants de la Presa Firme",
-      "Capa del Charlatán",
-      "Bastó d’enjambre d’insectes",
-      "Capa de les Ombres",
-      "Anell de la Fúria Controlada",
-      "Escut de la Resistència",
-      "Arma Executer Menor",
-      "Bastó de poder menor"
+      "Staff of Courage",
+      "Medallion of Resistance",
+      "Boots of Silent Path",
+      "Challenger's Sash",
+      "Ring of Quick Reaction",
+      "Guard's Dagger",
+      "Veteran's Lucky Coin",
+      "Bracers of Reflexes",
+      "Belt of Endurance",
+      "Staff of Minor Power",
+      "Ring of Evasive Escape",
+      "Bracelet of Shielding",
+      "Bracers +2 AC",
+      "Gloves of Firm Grip",
+      "Cloak of the Charlatan",
+      "Staff of Insect Swarm",
+      "Cloak of Shadows",
+      "Ring of Controlled Fury",
+      "Shield of Resistance",
+      "Lesser Executioner's Weapon",
+      "Staff of Greater Power"
     ];
 
-    const pociones = { /* sin cambios */ };
+    const pociones = {
+      infrecuente: [
+        "Potion of Fire Breath",
+        "Potion of Growth",
+        "2x Greater Healing Potion",
+        "Potion of Resistance",
+        "Potion of Water Breathing",
+        "Poison Potion"
+      ],
+      rara: [
+        "Potion of Gaseous Form",
+        "Potion of Frost Giant Strength",
+        "Potion of Heroism",
+        "Potion of Invisibility",
+        "Potion of Invulnerability",
+        "2x Greater Healing Potion"
+      ],
+      muy_rara: [
+        "Potion of Enhanced Resistance",
+        "Potion of Haste",
+        "Potion of Levitation",
+        "Potion of Flying",
+        "2x Full Healing Potion",
+        "Storm Giant's Potion"
+      ]
+    };
+
+    let isAnimating = false;
 
     function tirar(tipo) {
       if (tipo === 'objeto') {
@@ -61,6 +88,8 @@
     }
 
     function animarTiradaObjeto(callback) {
+      if (isAnimating) return;
+      isAnimating = true;
       let i = 0;
       const vueltas = 30 + Math.floor(Math.random() * 20);
       const div = document.getElementById("resultado-objeto");
@@ -70,6 +99,7 @@
         i++;
         if (i > vueltas) {
           clearInterval(intervalo);
+          isAnimating = false;
           if (callback) callback();
         }
       }, 75);
@@ -92,7 +122,7 @@
         const data = snapshot.val();
         const div = document.getElementById(`resultado-${tipo}`);
         if (!data) {
-          div.innerHTML = "Todavía no se ha tirado.";
+          div.innerHTML = "No roll yet.";
           return;
         }
 
@@ -104,23 +134,44 @@
               }
             });
           } else if (data.estado === 'resultado') {
-            div.innerHTML = `<strong>${data.objeto}</strong>`;
+            if (!isAnimating) {
+              div.innerHTML = `<strong>${data.objeto}</strong>`;
+            } else {
+              setTimeout(() => {
+                div.innerHTML = `<strong>${data.objeto}</strong>`;
+              }, 2500);
+            }
           }
         } else if (tipo === "pocion") {
           if (data.paso === 1) {
             ultimaTipo = data.tipo;
-            div.innerHTML = `Resultado: ${data.tiradaTipo}<br>Tipo: <strong>${data.tipo}</strong><br><button onclick='tirarPocionFinal()'>Tirar 1d6</button>`;
+            div.innerHTML = `Roll: ${data.tiradaTipo}<br>Type: <strong>${data.tipo}</strong><br><button onclick='tirarPocionFinal()'>Roll 1d6</button>`;
           } else if (data.paso === 2) {
-            div.innerHTML = `Poción obtenida: <strong>${data.resultadoFinal}</strong>`;
+            div.innerHTML = `Potion obtained: <strong>${data.resultadoFinal}</strong>`;
           } else {
-            div.innerHTML = "Listo para tirar";
+            div.innerHTML = "Ready to roll.";
           }
         }
       });
     }
 
-    function tirarPocion() { /* sin cambios */ }
-    function tirarPocionFinal() { /* sin cambios */ }
+    function tirarPocion() {
+      const tiradaTipo = Math.floor(Math.random() * 20) + 1;
+      let tipo;
+      if (tiradaTipo <= 10) tipo = "infrecuente";
+      else if (tiradaTipo <= 16) tipo = "rara";
+      else tipo = "muy_rara";
+
+      const resultadoRef = ref(db, `tiradas/pocion`);
+      set(resultadoRef, { tiradaTipo, tipo, paso: 1 });
+    }
+
+    function tirarPocionFinal() {
+      const dado = Math.floor(Math.random() * 6);
+      const resultadoRef = ref(db, `tiradas/pocion`);
+      set(resultadoRef, { tiradaTipo: null, tipo: null, resultadoFinal: pociones[ultimaTipo][dado], paso: 2 });
+    }
+
     function resetear(tipo) {
       const resultadoRef = ref(db, `tiradas/${tipo}`);
       remove(resultadoRef);
@@ -170,14 +221,14 @@
 <body>
   <h1>Get Your Loot 🧙‍♂️</h1>
 
-  <h2>Objeto Mágico</h2>
-  <button onclick="tirar('objeto')">Tirar Objeto Mágico</button>
+  <h2>Magic Item</h2>
+  <button onclick="tirar('objeto')">Roll Magic Item</button>
   <button onclick="resetear('objeto')">Reset</button>
-  <div id="resultado-objeto" class="resultado">Cargando...</div>
+  <div id="resultado-objeto" class="resultado">Loading...</div>
 
-  <h2>Poción</h2>
-  <button onclick="tirarPocion()">Tirar para tipo de Poción</button>
+  <h2>Potion</h2>
+  <button onclick="tirarPocion()">Roll Potion Type</button>
   <button onclick="resetear('pocion')">Reset</button>
-  <div id="resultado-pocion" class="resultado">Cargando...</div>
+  <div id="resultado-pocion" class="resultado">Loading...</div>
 </body>
 </html>
