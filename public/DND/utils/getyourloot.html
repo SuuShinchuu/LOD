@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Tirada compartida - D&D</title>
+  <title>Get Your Loot 🧙‍♂️</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDcFbVX7eh98iQ71E6GjWF40ai-qWPVTY8",
@@ -30,12 +30,32 @@
       { min: 96, max: 100, objeto: "Objeto legendario aleatorio" }
     ];
 
-    const tablaPociones = [
-      { min: 1, max: 50, objeto: "Poción de curación menor" },
-      { min: 51, max: 80, objeto: "Poción de resistencia" },
-      { min: 81, max: 95, objeto: "Poción de velocidad" },
-      { min: 96, max: 100, objeto: "Poción de invulnerabilidad" }
-    ];
+    const pociones = {
+      infrecuente: [
+        "Poción de aliento de fuego",
+        "Poción de crecimiento",
+        "2 Poción de curación mayor",
+        "Poción de resistencia",
+        "Poción de respirar bajo el agua",
+        "Poción de veneno"
+      ],
+      rara: [
+        "Poción de forma gaseosa",
+        "Poción de fuerza de gigante escarcha",
+        "Poción de heroísmo",
+        "Poción de invisibilidad",
+        "Poción de invulnerabilidad",
+        "2 Poción Curación Mayor"
+      ],
+      muy_rara: [
+        "Poción de resistencia mejorada",
+        "Poción de velocidad",
+        "Poción de levitar",
+        "Poción de vuelo",
+        "2 Poción curación completa",
+        "Poción de gigante de tormenta"
+      ]
+    };
 
     function obtenerObjeto(tirada, tabla) {
       return tabla.find(entry => tirada >= entry.min && tirada <= entry.max)?.objeto || "Nada encontrado";
@@ -43,25 +63,65 @@
 
     function tirar(tipo) {
       const tirada = Math.floor(Math.random() * 100) + 1;
-      const objeto = obtenerObjeto(tirada, tipo === 'objeto' ? tablaObjetos : tablaPociones);
+      const objeto = obtenerObjeto(tirada, tablaObjetos);
       const resultadoRef = ref(db, `tiradas/${tipo}`);
       set(resultadoRef, { tirada, objeto });
     }
+
+    function tirarPocion() {
+      const tiradaTipo = Math.floor(Math.random() * 20) + 1;
+      let tipo;
+      if (tiradaTipo <= 10) tipo = "infrecuente";
+      else if (tiradaTipo <= 16) tipo = "rara";
+      else tipo = "muy_rara";
+
+      const resultadoRef = ref(db, `tiradas/pocion`);
+      set(resultadoRef, { tiradaTipo, tipo, paso: 1 });
+    }
+
+    function tirarPocionFinal() {
+      const dado = Math.floor(Math.random() * 6);
+      const resultadoRef = ref(db, `tiradas/pocion`);
+      set(resultadoRef, { tiradaTipo: null, tipo: null, resultadoFinal: pociones[ultimaTipo][dado], paso: 2 });
+    }
+
+    function resetear(tipo) {
+      const resultadoRef = ref(db, `tiradas/${tipo}`);
+      remove(resultadoRef);
+    }
+
+    let ultimaTipo = null;
 
     function actualizarVista(tipo) {
       const resultadoRef = ref(db, `tiradas/${tipo}`);
       onValue(resultadoRef, (snapshot) => {
         const data = snapshot.val();
         const div = document.getElementById(`resultado-${tipo}`);
-        if (data) {
-          div.innerHTML = `Resultado: ${data.tirada}<br><strong>${data.objeto}</strong>`;
-        } else {
+        if (!data) {
           div.innerHTML = "Todavía no se ha tirado.";
+          return;
+        }
+
+        if (tipo === "objeto") {
+          div.innerHTML = `Resultado: ${data.tirada}<br><strong>${data.objeto}</strong>`;
+        } else if (tipo === "pocion") {
+          if (data.paso === 1) {
+            ultimaTipo = data.tipo;
+            div.innerHTML = `Resultado: ${data.tiradaTipo}<br>Tipo: <strong>${data.tipo}</strong><br><button onclick='tirarPocionFinal()'>Tirar 1d6</button>`;
+          } else if (data.paso === 2) {
+            div.innerHTML = `Poción obtenida: <strong>${data.resultadoFinal}</strong>`;
+          } else {
+            div.innerHTML = "Listo para tirar";
+          }
         }
       });
     }
 
     window.tirar = tirar;
+    window.tirarPocion = tirarPocion;
+    window.tirarPocionFinal = tirarPocionFinal;
+    window.resetear = resetear;
+
     window.onload = () => {
       actualizarVista('objeto');
       actualizarVista('pocion');
@@ -100,10 +160,12 @@
 
   <h2>Objeto Mágico</h2>
   <button onclick="tirar('objeto')">Tirar Objeto Mágico</button>
+  <button onclick="resetear('objeto')">Reset</button>
   <div id="resultado-objeto" class="resultado">Cargando...</div>
 
   <h2>Poción</h2>
-  <button onclick="tirar('pocion')">Tirar Poción</button>
+  <button onclick="tirarPocion()">Tirar para tipo de Poción</button>
+  <button onclick="resetear('pocion')">Reset</button>
   <div id="resultado-pocion" class="resultado">Cargando...</div>
 </body>
 </html>
