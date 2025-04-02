@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Loot Repartiment</title>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+    import { getDatabase, ref, onValue, set, get, child } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcFbVX7eh98iQ71E6GjWF40ai-qWPVTY8",
+      authDomain: "getyourloot-ab15a.firebaseapp.com",
+      databaseURL: "https://getyourloot-ab15a-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "getyourloot-ab15a",
+      storageBucket: "getyourloot-ab15a.appspot.com",
+      messagingSenderId: "398987786235",
+      appId: "1:398987786235:web:17c236affdb8e920cabd5e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const userId = crypto.randomUUID();
+
+    const loot = [
+      "Hacha una mano \"Feroz\" (+7 mal si crític)",
+      "Anell curació 2d8+2 1/dia (descans llarg)",
+      "Capa CA+1 (màxim CA 18)",
+      "Anell Fletxa Àcida lvl3, 1/dia (5d4/3d4)",
+      "Poció alè de foc (5d6, 2 cops/hora)",
+      "2 Pocions curació 4d8+6",
+      "Braçalet de l’escut (+5CA i immune a míssils màgics com a reacció)",
+      "Anell de l’escut (+5CA i immune a míssils màgics com a reacció)",
+      "Anell d’or i safir (900 po)",
+      "Collar de perles (300 po)",
+      "6 Pedres precioses (100 po cadascuna)"
+    ];
+
+    function renderLoot() {
+      const container = document.getElementById('loot');
+      container.innerHTML = '';
+      loot.forEach((item, index) => {
+        const itemRef = ref(db, `interesos/${index}`);
+
+        const div = document.createElement('div');
+        div.className = 'item';
+        const title = document.createElement('h3');
+        title.textContent = item;
+
+        const list = document.createElement('ul');
+        list.id = `interes-${index}`;
+
+        const input = document.createElement('input');
+        input.placeholder = "Nom";
+        input.id = `input-${index}`;
+
+        const button = document.createElement('button');
+        button.textContent = 'Apuntar-se';
+        button.onclick = () => {
+          const name = input.value.trim();
+          if (name) {
+            get(itemRef).then(snapshot => {
+              const data = snapshot.val() || [];
+              if (!data.includes(name)) {
+                set(itemRef, [...data, name]);
+              }
+            });
+            input.value = '';
+          }
+        };
+
+        onValue(itemRef, (snapshot) => {
+          const noms = snapshot.val() || [];
+          list.innerHTML = '';
+          noms.forEach(nom => {
+            const li = document.createElement('li');
+            li.textContent = nom;
+            list.appendChild(li);
+          });
+        });
+
+        div.appendChild(title);
+        div.appendChild(list);
+        div.appendChild(input);
+        div.appendChild(button);
+        container.appendChild(div);
+      });
+    }
+
+    window.onload = () => {
+      renderLoot();
+    };
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+    }
+    .item {
+      background: white;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    input {
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      width: 200px;
+    }
+    button {
+      margin-left: 0.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Repartiment de Loot</h1>
+  <div id="loot"></div>
+</body>
+</html>
