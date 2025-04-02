@@ -5,7 +5,7 @@
   <title>Loot Repartiment</title>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-    import { getDatabase, ref, onValue, set, get, child } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+    import { getDatabase, ref, onValue, set, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyDcFbVX7eh98iQ71E6GjWF40ai-qWPVTY8",
@@ -19,7 +19,8 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const userId = crypto.randomUUID();
+
+    const jugadors = ["Xara", "Kyth", "Rappel", "Leppard", "Durum", "Ananis", "Shifu"];
 
     const loot = [
       "Hacha una mano \"Feroz\" (+7 mal si crític)",
@@ -49,14 +50,24 @@
         const list = document.createElement('ul');
         list.id = `interes-${index}`;
 
-        const input = document.createElement('input');
-        input.placeholder = "Nom";
-        input.id = `input-${index}`;
+        const select = document.createElement('select');
+        select.id = `select-${index}`;
+        const optDefault = document.createElement('option');
+        optDefault.disabled = true;
+        optDefault.selected = true;
+        optDefault.textContent = 'Tria un jugador';
+        select.appendChild(optDefault);
+        jugadors.forEach(j => {
+          const opt = document.createElement('option');
+          opt.value = j;
+          opt.textContent = j;
+          select.appendChild(opt);
+        });
 
         const button = document.createElement('button');
         button.textContent = 'Apuntar-se';
         button.onclick = () => {
-          const name = input.value.trim();
+          const name = select.value;
           if (name) {
             get(itemRef).then(snapshot => {
               const data = snapshot.val() || [];
@@ -64,7 +75,7 @@
                 set(itemRef, [...data, name]);
               }
             });
-            input.value = '';
+            select.selectedIndex = 0;
           }
         };
 
@@ -80,7 +91,7 @@
 
         div.appendChild(title);
         div.appendChild(list);
-        div.appendChild(input);
+        div.appendChild(select);
         div.appendChild(button);
         container.appendChild(div);
       });
@@ -106,15 +117,13 @@
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-    input {
-      padding: 0.5rem;
+    select, button {
       margin-top: 0.5rem;
-      width: 200px;
+      padding: 0.5rem;
+      font-size: 1rem;
     }
-    button {
-      margin-left: 0.5rem;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
+    ul {
+      margin-top: 0.5rem;
     }
   </style>
 </head>
